@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>phoda</title>
+		<title>PHoDa</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="css/index.css">
 		<script type="text/javascript" src="js/index.js"></script>
 	</head>
 	<body>
 		<header class="header-container">
-			<h1>phoda</h1>
+			<h1>PHoDa</h1>
 		</header>
 		
 		<div class="input-container">
@@ -20,13 +20,22 @@
 				<img class='img' src="#"/>
 			</div>
 			<div class="filter-container hidden">
+				<input type="checkbox" id="original_cb">Usar imagem original<br>
 				<button onclick="blackAndWhite()">B&W</button>
 				<button onclick="negativeBW()">Negative B&W</button>
 				<button onclick="negative()">Negative</button>
 				<button onclick="log()">Log</button>
 				<button onclick="exp()">Exp</button>
+				<button onclick="gamma()">Gamma</button>
+				<div id="slidecontainer">
+					<input type="number" id="gammaConst" value="1" title="Const Value"/>
+					<input type="range" min="0.01" max="100" value="50" class="slider" id="gammaRange" title="Gamma Value" oninput="gamma_range(this.value)"/>
+					<p>Gamma Value: <span id="valuegamma">50</span></p>
+				</div>
+				
 			</div>
 		</div>
 		<canvas class="canvas hidden"></canvas>
+		<p id="originalh"></p>
 	</body>
 </html>

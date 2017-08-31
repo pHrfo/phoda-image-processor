@@ -1,3 +1,6 @@
+var buffered_img = document.createElement("img");
+var blank = document.createElement('canvas');
+
 var readImage = function(event, element) {
 	var file = event.target.files[0]
 	var reader = new FileReader()
@@ -15,19 +18,38 @@ var readImage = function(event, element) {
 	
 	document.querySelector('.filter-container').classList.remove('hidden')
 
-}
+};
 var genericFilter = function() {
 	var canvas = document.querySelector(".canvas")
 	canvas.classList.remove('hidden')
+
+	blank.width = canvas.width;
+    blank.height = canvas.height;
 	
 	var ctx = canvas.getContext("2d")
 
-	var img = document.querySelector(".image-container .img")
+	var img
+
+	if (document.getElementById("original_cb").checked == true){
+		img = document.querySelector(".image-container .img")
+		document.getElementById('originalh').innerHTML = "Usando imagem original"
+	}
+	else{
+		buffered_img.src = canvas.toDataURL();
+      	if (buffered_img.src == blank.toDataURL()){
+      		img = document.querySelector(".image-container .img")
+      		document.getElementById('originalh').innerHTML = "Usando imagem original"
+      	}
+      	else{
+      		img = buffered_img;
+      		document.getElementById('originalh').innerHTML = "Usando última imagem editada"
+      	}  	
+	}
 
 	ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
 	
 	return ctx.getImageData(0, 0, canvas.width, canvas.height)
-}
+};
 
 var blackAndWhite = function() {
 	var imgData = genericFilter()
@@ -39,7 +61,7 @@ var blackAndWhite = function() {
 		imgData.data[i+2] = mean
 	}
 	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
-}
+};
 
 var negativeBW = function() {
 	var imgData = genericFilter()
@@ -51,7 +73,7 @@ var negativeBW = function() {
 		imgData.data[i+2] = 255 - mean
 	}
 	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
-}
+};
 
 var negative = function() {
 	var imgData = genericFilter()
@@ -62,18 +84,18 @@ var negative = function() {
 		imgData.data[i+2] = 255 - imgData.data[i+2]
 	}
 	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
-}
+};
 
 var log = function() {
 	var imgData = genericFilter()
 
 	for (var i = 0; i < imgData.data.length; i += 4) {
-		imgData.data[i] = Math.log(imgData.data[i])
-		imgData.data[i+1] = Math.log(imgData.data[i+1])
-		imgData.data[i+2] = Math.log(imgData.data[i+2])
+		imgData.data[i] = Math.log(1 + imgData.data[i])
+		imgData.data[i+1] = Math.log(1 + imgData.data[i+1])
+		imgData.data[i+2] = Math.log(1 + imgData.data[i+2])
 	}
 	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
-}
+};
 
 var exp = function() {
 	var imgData = genericFilter()
@@ -84,4 +106,21 @@ var exp = function() {
 		imgData.data[i+2] = Math.exp(imgData.data[i+2])
 	}
 	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
+};
+
+var gamma = function(){
+	var imgData = genericFilter()
+	var cons = document.getElementById("gammaConst").value;
+	var gamma = document.getElementById("gammaRange").value;
+
+	for (var i = 0; i < imgData.data.length; i += 4) {
+		imgData.data[i] = cons*Math.pow(imgData.data[i],gamma)
+		imgData.data[i+1] = cons*Math.pow(imgData.data[i+1],gamma)
+		imgData.data[i+2] = cons*Math.pow(imgData.data[i+2],gamma)
+	}
+	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
+};
+
+var gamma_range = function(value){
+	document.getElementById("valuegamma").innerHTML = value;
 }
