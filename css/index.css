@@ -8,6 +8,16 @@ body {
 	display: block;
 }
 
+.panel{
+	width: 65%;
+    display: inline-block;
+}
+
+.container{
+	display: inline-block;
+	width: 100%;
+}
+
 .header-container h1 {
 	background-image: url(../img/header.jpg);
 	padding: 10px;
@@ -18,9 +28,8 @@ body {
 
 .input-container {
 	vertical-align: middle;
-	padding: 5px;
-    left: 40%;
-    text-align: center;
+	display: inline-block;
+
 }
 
 .input-container .file-upload {
@@ -34,8 +43,14 @@ body {
 }
 
 .business-container {
-	display: block;
+	display: inline-block;
 	max-width: 47%;
+}
+
+.image-container {
+	display: inline-block;
+	width: 45%;
+	margin-right: 20px;
 }
 
 .image-container .img{
@@ -49,11 +64,18 @@ body {
 
 }
 
-/*.filter-container {
+.filter-container {
 	padding-top: 25px;
-	display: block; 
+    display: inline-block;
+    width: 30%;
 }
-*/
+
 .canvas {
 	padding-top: 10px;
+	display: inline-block;
+	width: 45%;
+}
+
+.image-canvas-container {
+	display: inline-flex;
 }
