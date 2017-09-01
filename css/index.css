@@ -72,6 +72,19 @@ body {
 
 .filter-option {
 	display: block;
+    padding: 6px 20px 8px 20px;
+    margin: 0px 0 10px 0;
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Open Sans',Arial,sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.8);
+    background: #3a95d0;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-radius: 50px;
+    width: 100%;
 }
 
 .canvas {

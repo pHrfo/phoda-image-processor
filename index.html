@@ -28,11 +28,11 @@
 				<button  class="filter-option" onclick="negative()">Negative</button>
 				<button  class="filter-option" onclick="log()">Log</button>
 				<button  class="filter-option" onclick="exp()">Exp</button>
-				<p class="filter-option">Gamma constant:</p>
 				<div id="slidecontainer" class="filter-option">
+					<p>Gamma constant:</p>
 					<input type="number" id="gammaConst" value="1" title="Const Value"/>
 					<input type="range" min="0.01" max="100" value="50" class="slider" id="gammaRange" title="Gamma Value" oninput="gamma_range(this.value)"/>
-					<p>Gamma value: <input type="number" id="valuegamma" value="50"></span></p>
+					<p>Gamma value: <input type="number" id="valuegamma" oninput="gamma_range(this.value)" value="50"></span></p>
 				</div>
 				<p id="originalh"></p>
 			</div>
