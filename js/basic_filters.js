@@ -93,9 +93,9 @@ var log = function() {
 	var imgData = genericFilter()
 
 	for (var i = 0; i < imgData.data.length; i += 4) {
-		imgData.data[i] = Math.log(1 + imgData.data[i])
-		imgData.data[i+1] = Math.log(1 + imgData.data[i+1])
-		imgData.data[i+2] = Math.log(1 + imgData.data[i+2])
+		imgData.data[i] = 25*Math.log(1 + imgData.data[i])
+		imgData.data[i+1] = 25*Math.log(1 + imgData.data[i+1])
+		imgData.data[i+2] = 25*Math.log(1 + imgData.data[i+2])
 	}
 	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
 };

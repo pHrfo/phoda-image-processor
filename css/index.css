@@ -11,6 +11,7 @@ body {
 .panel{
 	width: 65%;
     display: inline-block;
+    vertical-align: top;
 }
 
 .container{
@@ -67,6 +68,10 @@ body {
 	padding-top: 25px;
     display: inline-block;
     width: 30%;
+}
+
+.filter-option {
+	display: block;
 }
 
 .canvas {

@@ -4,6 +4,7 @@
 		<title>PHoDa</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="css/index.css">
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script type="text/javascript" src="js/basic_filters.js"></script>
 		<script type="text/javascript" src="js/histogram.js"></script>
 	</head>
@@ -22,16 +23,16 @@
 			</div>
 			<div class="filter-container hidden">
 				<input type="checkbox" id="original_cb">Usar imagem original<br>
-				<button onclick="blackAndWhite()">B&W</button>
-				<button onclick="negativeBW()">Negative B&W</button>
-				<button onclick="negative()">Negative</button>
-				<button onclick="log()">Log</button>
-				<button onclick="exp()">Exp</button>
-				<p>Gamma</p>
-				<div id="slidecontainer">
+				<button  class="filter-option" onclick="blackAndWhite()">B&W</button>
+				<button  class="filter-option" onclick="negativeBW()">Negative B&W</button>
+				<button  class="filter-option" onclick="negative()">Negative</button>
+				<button  class="filter-option" onclick="log()">Log</button>
+				<button  class="filter-option" onclick="exp()">Exp</button>
+				<p class="filter-option">Gamma constant:</p>
+				<div id="slidecontainer" class="filter-option">
 					<input type="number" id="gammaConst" value="1" title="Const Value"/>
 					<input type="range" min="0.01" max="100" value="50" class="slider" id="gammaRange" title="Gamma Value" oninput="gamma_range(this.value)"/>
-					<p>Gamma Value: <input type="number" id="valuegamma" value="50"></span></p>
+					<p>Gamma value: <input type="number" id="valuegamma" value="50"></span></p>
 				</div>
 				<p id="originalh"></p>
 			</div>

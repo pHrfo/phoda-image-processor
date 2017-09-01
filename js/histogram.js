@@ -1,4 +1,3 @@
-
 var showHistogram = function () {
 	window.opt= 2;
 	var histogramContainer = document.querySelector('.histogram-container')
