@@ -28,8 +28,6 @@ var genericFilter = function() {
 
 	blank.width = canvas.width;
     blank.height = canvas.height;
-	
-	var ctx = canvas.getContext("2d")
 
 	var img
 
@@ -48,6 +46,11 @@ var genericFilter = function() {
       		document.getElementById('originalh').innerHTML = "Usando última imagem editada"
       	}  	
 	}
+
+	canvas.width  = img.width;
+	canvas.height = img.height;
+
+	var ctx = canvas.getContext("2d")
 
 	ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
 	
@@ -93,9 +96,9 @@ var log = function() {
 	var imgData = genericFilter()
 
 	for (var i = 0; i < imgData.data.length; i += 4) {
-		imgData.data[i] = 25*Math.log(1 + imgData.data[i])
-		imgData.data[i+1] = 25*Math.log(1 + imgData.data[i+1])
-		imgData.data[i+2] = 25*Math.log(1 + imgData.data[i+2])
+		imgData.data[i] = 46*Math.log(1 + imgData.data[i])
+		imgData.data[i+1] = 46*Math.log(1 + imgData.data[i+1])
+		imgData.data[i+2] = 46*Math.log(1 + imgData.data[i+2])
 	}
 	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
 };
@@ -111,10 +114,23 @@ var exp = function() {
 	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
 };
 
+var threshold = function() {
+	var imgData = genericFilter()
+	var thresh = document.getElementById("thresholdValue").value
+
+	for (var i = 0; i < imgData.data.length; i += 4) {
+		var mean = (imgData.data[i] + imgData.data[i+1] + imgData.data[i+2])/3
+		imgData.data[i] = (mean > thresh ? 0 : 255)
+		imgData.data[i+1] = (mean > thresh ? 0 : 255)
+		imgData.data[i+2] = (mean > thresh ? 0 : 255)
+	}
+	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
+}
+
 var gamma = function(){
 	var imgData = genericFilter()
-	var cons = document.getElementById("gammaConst").value;
-	var gamma = document.getElementById("gammaRange").value;
+	var cons = document.getElementById("gammaConst").value
+	var gamma = document.getElementById("gammaRange").value
 
 	for (var i = 0; i < imgData.data.length; i += 4) {
 		imgData.data[i] = cons*Math.pow(imgData.data[i],gamma)
@@ -122,7 +138,7 @@ var gamma = function(){
 		imgData.data[i+2] = cons*Math.pow(imgData.data[i+2],gamma)
 	}
 	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
-};
+}
 
 var gamma_range = function(value){
 	var image = document.querySelector('.image-container .img')
@@ -137,10 +153,6 @@ var showFilters = function () {
 	window.opt = 1;
 	var imageContainer = document.querySelector('.filter-container')
 	var histogramContainer = document.querySelector('.histogram-container')
-	
-	if (!histogramContainer.classList.contains('hidden')){
-		histogramContainer.classList.add('hidden')
-	}
 
 	if (imageContainer.classList.contains('hidden')){
 		imageContainer.classList.remove('hidden')

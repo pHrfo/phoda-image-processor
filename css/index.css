@@ -12,6 +12,7 @@ body {
 	width: 65%;
     display: inline-block;
     vertical-align: top;
+    padding-left: 15px;
 }
 
 .container{
@@ -42,11 +43,6 @@ body {
 	visibility: hidden;
 }
 
-.business-container {
-	display: inline-block;
-	max-width: 47%;
-}
-
 .image-container {
 	display: inline-block;
 	width: 45%;
@@ -66,8 +62,12 @@ body {
 
 .filter-container {
 	padding-top: 25px;
-    display: inline-block;
+    display: inline-flex;
     width: 30%;
+}
+
+.filter-buttons {
+	display: block;
 }
 
 .filter-option {
@@ -81,10 +81,18 @@ body {
     font-size: 14px;
     text-transform: uppercase;
     color: rgba(255,255,255,0.8);
-    background: #3a95d0;
+    background: #404040;
     border: 2px solid rgba(0,0,0,0.1);
     border-radius: 50px;
     width: 100%;
+}
+
+.gamma-filter-option {
+	width: 83.3%;
+}
+
+.gamma {
+	width: 50px
 }
 
 .canvas {
@@ -95,4 +103,8 @@ body {
 
 .image-canvas-container {
 	display: inline-flex;
+}
+
+.chart-div {
+	width: auto;
 }

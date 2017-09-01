@@ -18,23 +18,26 @@
 			<input type='file' class="file-upload" onchange="readImage(event, this)"/>
 		</div>
 		<div>
-			<div class="histogram-container hidden">
-				<button onclick="completeHistogram()">Histograma completo</button>
-			</div>
 			<div class="filter-container hidden">
-				<input type="checkbox" id="original_cb">Usar imagem original<br>
-				<button  class="filter-option" onclick="blackAndWhite()">B&W</button>
-				<button  class="filter-option" onclick="negativeBW()">Negative B&W</button>
-				<button  class="filter-option" onclick="negative()">Negative</button>
-				<button  class="filter-option" onclick="log()">Log</button>
-				<button  class="filter-option" onclick="exp()">Exp</button>
-				<div id="slidecontainer" class="filter-option">
-					<p>Gamma constant:</p>
-					<input type="number" id="gammaConst" value="1" title="Const Value"/>
-					<input type="range" min="0.01" max="100" value="50" class="slider" id="gammaRange" title="Gamma Value" oninput="gamma_range(this.value)"/>
-					<p>Gamma value: <input type="number" id="valuegamma" oninput="gamma_range(this.value)" value="50"></span></p>
+				<div class="filter-buttons">	
+					<input type="checkbox" id="original_cb">Usar imagem original<br>
+					<button  class="filter-option" onclick="blackAndWhite()">B&W</button>
+					<button  class="filter-option" onclick="negativeBW()">Negative B&W</button>
+					<button  class="filter-option" onclick="negative()">Negative</button>
+					<button  class="filter-option" onclick="log()">Log</button>
+					<button  class="filter-option" onclick="exp()">Exp</button>
+					<div class="filter-option">
+						<p>Threshold value: </p>
+						<input type="number" id="thresholdValue" value="1" title="Const Value" oninput="threshold()"/>
+					</div>
+					<div id="slidecontainer" class="filter-option gamma-filter-option">
+						<p>Gamma constant:</p>
+						<input type="number" id="gammaConst" value="1" title="Const Value" oninput="gamma_range(this.value)"/>
+						<input type="range" min="0.01" max="100" value="50" class="slider" id="gammaRange" title="Gamma Value" oninput="gamma_range(this.value)"/>
+						<p>Gamma value: <input class="gamma" type="number" id="valuegamma" oninput="gamma_range(this.value)" value="50"></span></p>
+					</div>
+					<p id="originalh"></p>
 				</div>
-				<p id="originalh"></p>
 			</div>
 			<div class="panel">
 				<div class="image-canvas-container container">
@@ -42,6 +45,9 @@
 						<img class='img'/>
 					</div>
 					<canvas class="canvas hidden"></canvas>
+				</div>
+				<div class="chart-div hidden">
+
 				</div>
 			</div>
 		</div>
