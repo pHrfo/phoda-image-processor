@@ -4,41 +4,45 @@
 		<title>PHoDa</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="css/index.css">
-		<script type="text/javascript" src="js/index.js"></script>
+		<script type="text/javascript" src="js/basic_filters.js"></script>
+		<script type="text/javascript" src="js/histogram.js"></script>
 	</head>
 	<body>
 		<header class="header-container">
 			<h1>PHoDa</h1>
 		</header>
-		
+		<button onclick="showFilters()">Filtros</button>
+		<button onclick="showHistogram()">Histograma</button>
+		<div class="input-container container" >
+			<input type='file' class="file-upload" onchange="readImage(event, this)"/>
+		</div>
 		<div>
+			<div class="histogram-container hidden">
+				<button onclick="completeHistogram()">Histograma completo</button>
+			</div>
 			<div class="filter-container hidden">
+				<input type="checkbox" id="original_cb">Usar imagem original<br>
 				<button onclick="blackAndWhite()">B&W</button>
 				<button onclick="negativeBW()">Negative B&W</button>
 				<button onclick="negative()">Negative</button>
 				<button onclick="log()">Log</button>
 				<button onclick="exp()">Exp</button>
-				<button onclick="gamma()">Gamma</button>
+				<p>Gamma</p>
 				<div id="slidecontainer">
 					<input type="number" id="gammaConst" value="1" title="Const Value"/>
 					<input type="range" min="0.01" max="100" value="50" class="slider" id="gammaRange" title="Gamma Value" oninput="gamma_range(this.value)"/>
-					<p>Gamma Value: <input id="valuegamma">50</span></p>
+					<p>Gamma Value: <input type="number" id="valuegamma" value="50"></span></p>
 				</div>
-				
+				<p id="originalh"></p>
 			</div>
 			<div class="panel">
-				<div class="input-container container" >
-					<input type='file' class="file-upload" onchange="readImage(event, this)"/>
-					<input type="checkbox" id="original_cb">Usar imagem original<br>
-				</div>
 				<div class="image-canvas-container container">
 					<div class="image-container hidden">
-						<img class='img' src="#"/>
+						<img class='img'/>
 					</div>
 					<canvas class="canvas hidden"></canvas>
 				</div>
 			</div>
 		</div>
-		<p id="originalh"></p>
 	</body>
 </html>

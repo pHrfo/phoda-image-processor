@@ -1,3 +1,5 @@
+window.opt = null
+
 var buffered_img = document.createElement("img");
 var blank = document.createElement('canvas');
 
@@ -16,7 +18,8 @@ var readImage = function(event, element) {
 
 	reader.readAsDataURL(file)
 	
-	document.querySelector('.filter-container').classList.remove('hidden')
+	if(window.opt == 1)
+		document.querySelector('.filter-container').classList.remove('hidden')
 
 };
 var genericFilter = function() {
@@ -122,5 +125,24 @@ var gamma = function(){
 };
 
 var gamma_range = function(value){
-	document.getElementById("valuegamma").innerHTML = value;
+	var image = document.querySelector('.image-container .img')
+	if (image.src || image.src.length || image.src.length != 0) {
+		gamma()
+	}
+	document.getElementById("valuegamma").value = value;
+
+}
+
+var showFilters = function () {
+	window.opt = 1;
+	var imageContainer = document.querySelector('.filter-container')
+	var histogramContainer = document.querySelector('.histogram-container')
+	
+	if (!histogramContainer.classList.contains('hidden')){
+		histogramContainer.classList.add('hidden')
+	}
+
+	if (imageContainer.classList.contains('hidden')){
+		imageContainer.classList.remove('hidden')
+	}
 }
