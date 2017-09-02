@@ -70,11 +70,14 @@ body {
 	display: block;
 }
 
+.clickable{
+	cursor: pointer;
+}
+
 .filter-option {
 	display: block;
     padding: 6px 20px 8px 20px;
     margin: 0px 0 10px 0;
-    cursor: pointer;
     text-align: center;
     font-family: 'Open Sans',Arial,sans-serif;
     font-weight: normal;

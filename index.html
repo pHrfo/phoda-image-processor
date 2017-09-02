@@ -12,23 +12,41 @@
 		<header class="header-container">
 			<h1>PHoDa</h1>
 		</header>
-		<button onclick="showFilters()">Filtros</button>
-		<button onclick="showHistogram()">Histograma</button>
+		<button onclick="showFilters()">Filters</button>
+		<button onclick="showHistogram()">Histogram</button>
 		<div class="input-container container" >
 			<input type='file' class="file-upload" onchange="readImage(event, this)"/>
 		</div>
 		<div>
+			<div class="histogram-container hidden">
+				<button  class="pb_histogram" onclick="greyHistogram()">Histogram for B&W image</button>
+				<button  class="pb_histogram" onclick="">Histogram for RGB image</button>
+				<button  class="pb_histogram" onclick="globalHistogramEq()">Global histogram equalization</button>
+				<button  class="pb_histogram" onclick="">Local histogram equalization</button>
+			</div>
 			<div class="filter-container hidden">
 				<div class="filter-buttons">	
-					<input type="checkbox" id="original_cb">Usar imagem original<br>
-					<button  class="filter-option" onclick="blackAndWhite()">B&W</button>
-					<button  class="filter-option" onclick="negativeBW()">Negative B&W</button>
-					<button  class="filter-option" onclick="negative()">Negative</button>
-					<button  class="filter-option" onclick="log()">Log</button>
-					<button  class="filter-option" onclick="exp()">Exp</button>
+					<input type="checkbox" id="original_cb">Use original image<br>
+					<button  class="filter-option clickable" onclick="blackAndWhite()">B&W</button>
+					<button  class="filter-option clickable" onclick="negativeBW()">Negative B&W</button>
+					<button  class="filter-option clickable" onclick="negative()">Negative</button>
+					<button  class="filter-option clickable" onclick="log()">Log</button>
+					<button  class="filter-option clickable" onclick="exp()">Exp</button>
 					<div class="filter-option">
 						<p>Threshold value: </p>
-						<input type="number" id="thresholdValue" value="1" title="Const Value" oninput="threshold()"/>
+						<input type="number" id="thresholdValue" value="1" min="0" max="255" oninput="threshold()"/>
+					</div>
+					<div class="filter-option">
+						<p>Contrast stretching</p>
+						<input type="number" oninput=""/>
+						<input type="number" oninput=""/>
+					</div>
+					<div class="filter-option">
+						<p>Intensity Level Slicing</p>
+					</div>
+					<div class="filter-option">
+						<p>Bit-plane slicing</p>
+						<input type="number" min="1" max="8" value="1" oninput="bitPlaneSlicing(this.value)"oninput=""/>
 					</div>
 					<div id="slidecontainer" class="filter-option gamma-filter-option">
 						<p>Gamma constant:</p>
