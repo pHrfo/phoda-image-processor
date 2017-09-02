@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>PHoDa</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="css/index.css">
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		<script type="text/javascript" src="js/basic_filters.js"></script>
+		<script type="text/javascript" src="js/histogram.js"></script>
+	</head>
+	<body>
+		<header class="header-container">
+			<h1>PHoDa</h1>
+		</header>
+		<div class="header-button-container">
+			<button class="header-button" onclick="showFilters()">Filters</button>
+			<button class="header-button" onclick="showHistogram()">Histogram</button>
+		</div>
+		<div class="input-container container" >
+			<input type='file' class="file-upload" onchange="readImage(event, this)"/>
+		</div>
+		<div>
+			<div class="histogram-container hidden">
+				<button  class="pb_histogram" onclick="greyHistogram()">Histogram for B&W image</button>
+				<button  class="pb_histogram" onclick="">Histogram for RGB image</button>
+				<button  class="pb_histogram" onclick="globalHistogramEq()">Global histogram equalization</button>
+				<button  class="pb_histogram" onclick="">Local histogram equalization</button>
+			</div>
+			<div class="filter-container hidden">
+				<div class="filter-buttons">	
+					<input type="checkbox" id="original_cb">Use original image<br>
+					<button  class="filter-option clickable" onclick="blackAndWhite()">B&W</button>
+					<button  class="filter-option clickable" onclick="negativeBW()">Negative B&W</button>
+					<button  class="filter-option clickable" onclick="negative()">Negative</button>
+					<button  class="filter-option clickable" onclick="log()">Log</button>
+					<button  class="filter-option clickable" onclick="exp()">Exp</button>
+					<div class="filter-option gamma-filter-option">
+						<p>Threshold value: </p>
+						<div class="threshold-input-container">
+							<input type="number" class="threshold-input" id="thresholdValue" value="1" min="0" max="255"/>
+							<button class="threshold-ok" onclick="threshold()">ok</button>
+						</div>
+					</div>
+					<div class="filter-option gamma-filter-option">
+						<p>Contrast stretching</p>
+						<div class="points">
+							<table class="point-input-header">
+								<tr>
+									<td>X</td>
+									<td>Y</td>
+								</tr>
+							</table>
+							<div class="point-container">
+								<input class = "point-input x1" type="number" oninput=""/>
+								<input class = "point-input y1" type="number" oninput=""/>
+							</div>
+							<div class="point-container">
+								<input class = "point-input x2" type="number" oninput=""/>
+								<input class = "point-input y2" type="number" oninput=""/>
+							</div>
+							<div class="point-ok-container">
+								<button class= "point-ok" onclick="contrastStretching()">ok</button>
+							</div>
+						</div>
+					</div>
+					<div class="filter-option gamma-filter-option">
+						<p>Intensity Level Slicing</p>
+					</div>
+					<div class="filter-option gamma-filter-option">
+						<p>Bit-plane slicing</p>
+						<input type="number" min="1" max="8" value="1" oninput="bitPlaneSlicing(this.value)"oninput=""/>
+					</div>
+					<div id="slidecontainer" class="filter-option gamma-filter-option">
+						<p>Gamma constant:</p>
+						<input type="number" id="gammaConst" value="1" title="Const Value" oninput="gamma_range(this.value)"/>
+						<input type="range" min="0.01" max="100" value="50" class="slider" id="gammaRange" title="Gamma Value" oninput="gamma_range(this.value)"/>
+						<p>Gamma value: <input class="gamma" type="number" id="valuegamma" oninput="gamma_range(this.value)" value="50"></span></p>
+					</div>
+					<p id="originalh"></p>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="image-canvas-container container">
+					<div class="image-container hidden">
+						<img class='img'/>
+					</div>
+					<canvas class="canvas hidden"></canvas>
+				</div>
+				<div class="chart-div hidden">
+
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
