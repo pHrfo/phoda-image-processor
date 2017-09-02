@@ -25,10 +25,13 @@ var readImage = function(event, element) {
 var genericFilter = function() {
 	var canvas = document.querySelector(".canvas")
 
-	canvas.classList.remove('hidden')
+	if (canvas.classList.contains('hidden'))
+		canvas.classList.remove('hidden')
 
 	blank.width = canvas.width;
     blank.height = canvas.height;
+
+    window.emptyCanvas = false
 
 	var img
 
@@ -36,33 +39,33 @@ var genericFilter = function() {
 		img = document.querySelector(".image-container .img")
 		if (img.src)
 			document.getElementById('originalh').innerHTML = "Using original image"
+
+		window.emptyCanvas = true
 	}
 	else{
-		buffered_img.src = canvas.toDataURL();
-      	if (buffered_img.src == blank.toDataURL()){
+      	if (canvas.toDataURL() == blank.toDataURL()){
       		img = document.querySelector(".image-container .img")
       		if (img.src)
       			document.getElementById('originalh').innerHTML = "Using original image"
+
+      		window.emptyCanvas = true
       	}
       	else{
-      		img = buffered_img;
-
-      		if (img.src)
-      			document.getElementById('originalh').innerHTML = "Using last edited image"
-      	}  	
+      		document.getElementById('originalh').innerHTML = "Using last edited image"
+      	}  
 	}
 
-	if (img.src){
+	var ctx = canvas.getContext("2d")
 
-		canvas.width  = img.width;
-		canvas.height = img.height;
-	
-		var ctx = canvas.getContext("2d")
-	
+	if (window.emptyCanvas) {
+		canvas.width  = img.width
+		canvas.height = img.height
 		ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-		
-		return ctx.getImageData(0, 0, canvas.width, canvas.height)
 	}
+			
+
+	return ctx.getImageData(0, 0, canvas.width, canvas.height)
+
 };
 
 var blackAndWhite = function() {
@@ -179,6 +182,52 @@ var bitPlaneSlicing = function (value) {
 		document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
 	}
 };
+
+var findPoints = function(x1, y1, x2, y2) {
+	var dist1 = Math.sqrt(Math.pow(x1, 2) + Math.pow(y1, 2))
+	var dist2 = Math.sqrt(Math.pow(x2, 2) + Math.pow(y2, 2))
+
+	return (dist1 < dist2 ? [[x1, y1], [x2, y2]] : [[x2, y2], [x1, y1]])
+}
+
+var contrastStretching = function() {
+	var imgData = genericFilter()
+
+	if (imgData) {
+		var x1 = document.querySelector('.point-input.x1').value
+		var y1 = document.querySelector('.point-input.y1').value
+		var x2 = document.querySelector('.point-input.x2').value
+		var y2 = document.querySelector('.point-input.y2').value
+
+		var points = findPoints(x1, y1, x2, y2)
+
+		var p1 = points[0]
+		var p2 = points[1]
+		var o  = [0, 0]
+		var mx = [255, 255]
+
+		var line = function(x, p1, p2) {
+			var m = (p2[1] - p1[1])/(p2[0] - p1[0])
+			var c = p1[1] - m*p1[0]
+			var output = m*x + c
+			return (output > 255 ? 255 : output)
+		}
+
+		var decision = function(x) {
+			return (x < p1[0] ? line(x, o, p1) : (x < p2[0] ? line(x, p1, p2) : line(x, p2, mx)))
+		}
+
+		for (var i = 0; i < imgData.data.length; i += 4) {
+			imgData.data[i] = decision(imgData.data[i])
+			imgData.data[i+1] = decision(imgData.data[i+1])
+			imgData.data[i+2] = decision(imgData.data[i+2])
+		}
+		
+		document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
+
+
+	}
+}
 
 var showFilters = function () {
 	window.opt = 1;

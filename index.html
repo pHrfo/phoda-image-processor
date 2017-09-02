@@ -12,8 +12,10 @@
 		<header class="header-container">
 			<h1>PHoDa</h1>
 		</header>
-		<button onclick="showFilters()">Filters</button>
-		<button onclick="showHistogram()">Histogram</button>
+		<div class="header-button-container">
+			<button class="header-button" onclick="showFilters()">Filters</button>
+			<button class="header-button" onclick="showHistogram()">Histogram</button>
+		</div>
 		<div class="input-container container" >
 			<input type='file' class="file-upload" onchange="readImage(event, this)"/>
 		</div>
@@ -32,19 +34,39 @@
 					<button  class="filter-option clickable" onclick="negative()">Negative</button>
 					<button  class="filter-option clickable" onclick="log()">Log</button>
 					<button  class="filter-option clickable" onclick="exp()">Exp</button>
-					<div class="filter-option">
+					<div class="filter-option gamma-filter-option">
 						<p>Threshold value: </p>
-						<input type="number" id="thresholdValue" value="1" min="0" max="255" oninput="threshold()"/>
+						<div class="threshold-input-container">
+							<input type="number" class="threshold-input" id="thresholdValue" value="1" min="0" max="255"/>
+							<button class="threshold-ok" onclick="threshold()">ok</button>
+						</div>
 					</div>
-					<div class="filter-option">
+					<div class="filter-option gamma-filter-option">
 						<p>Contrast stretching</p>
-						<input type="number" oninput=""/>
-						<input type="number" oninput=""/>
+						<div class="points">
+							<table class="point-input-header">
+								<tr>
+									<td>X</td>
+									<td>Y</td>
+								</tr>
+							</table>
+							<div class="point-container">
+								<input class = "point-input x1" type="number" oninput=""/>
+								<input class = "point-input y1" type="number" oninput=""/>
+							</div>
+							<div class="point-container">
+								<input class = "point-input x2" type="number" oninput=""/>
+								<input class = "point-input y2" type="number" oninput=""/>
+							</div>
+							<div class="point-ok-container">
+								<button class= "point-ok" onclick="contrastStretching()">ok</button>
+							</div>
+						</div>
 					</div>
-					<div class="filter-option">
+					<div class="filter-option gamma-filter-option">
 						<p>Intensity Level Slicing</p>
 					</div>
-					<div class="filter-option">
+					<div class="filter-option gamma-filter-option">
 						<p>Bit-plane slicing</p>
 						<input type="number" min="1" max="8" value="1" oninput="bitPlaneSlicing(this.value)"oninput=""/>
 					</div>
