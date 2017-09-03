@@ -56,21 +56,23 @@ var genericFilter = function() {
 	}
 
 	var ctx = canvas.getContext("2d")
+	if (img.src){
+		if (window.emptyCanvas) {
+			canvas.width  = img.width
+			canvas.height = img.height
+			ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+		}
+				
 
-	if (window.emptyCanvas) {
-		canvas.width  = img.width
-		canvas.height = img.height
-		ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+		return ctx.getImageData(0, 0, canvas.width, canvas.height)
 	}
-			
-
-	return ctx.getImageData(0, 0, canvas.width, canvas.height)
 
 };
 
 var blackAndWhite = function() {
 	var imgData = genericFilter()
 	if(imgData){
+
 		for (var i = 0; i < imgData.data.length; i += 4) {
 			var mean = (imgData.data[i] + imgData.data[i+1] + imgData.data[i+2])/3
 			imgData.data[i] = mean
@@ -97,6 +99,7 @@ var negativeBW = function() {
 var negative = function() {
 	var imgData = genericFilter()
 	if(imgData){
+
 		for (var i = 0; i < imgData.data.length; i += 4) {
 			imgData.data[i] = 255 - imgData.data[i]
 			imgData.data[i+1] = 255 - imgData.data[i+1]

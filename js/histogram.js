@@ -67,40 +67,30 @@ var greyHistogram = function () {
 	}
 }
 
+
 var globalHistogramEq = function() {
 	var img = document.querySelector(".image-container .img")
 	if(img){
 	    var srcLength = img.src.length;
 	    var src = img.src
-	    var dst = src;
 
-	    // Compute histogram and histogram sum:
 	    var hist = new Float32Array(256);
-	    var sum = 0;
 	    for (var i = 0; i < srcLength; ++i) {
-	        ++hist[~~src[i]];
-	        ++sum;
+	        ++hist[src[i]];
 	    }
 
-	    // Compute integral histogram:
-	    var prev = hist[0];
-	    for (var i = 1; i < 256; ++i) {
-	        prev = hist[i] += prev;
+	    var norm = 255 / srcLength;
+	    for (var i = 0; i < srcLength; i+= 4) {
+	        src[i] = hist[src[i]] * norm;
+	        src[i] = hist[src[i+1]] * norm;
+	        src[i] = hist[src[i+2]] * norm;
 	    }
-
-	    // Equalize image:
-	    var norm = 255 / sum;
-	    for (var i = 0; i < srcLength; ++i) {
-	        dst[i] = hist[~~src[i]] * norm;
-	    }
-	    
+	    img.src = src;
 	    var canvas = document.querySelector(".canvas")
 	    var ctx = canvas.getContext("2d")
-		
-		data = ctx.getImageData(0, 0, canvas.width, canvas.height)
-		data.data.set(new Uint8ClampedArray(dst));
 
-	    ctx.putImageData(data, 0, 0)
+		ctx.drawImage(img, canvas.width, canvas.height);
+
 	    if (document.querySelector(".canvas").classList.contains("hidden"))
 	    	document.querySelector(".canvas").classList.remove("hidden")
 	}
