@@ -124,12 +124,17 @@ body {
 
 .point-ok-container {
 	padding-top: 5px;
+	display: inline-block;
 }
 
 .point-ok {
 	background: #535353;
     border: 2px solid rgba(0,0,0,0.1);
     border-radius: 50px;
+}
+
+.bit-plane-input {
+	display: inline-block;
 }
 
 .filter-option {
