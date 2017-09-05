@@ -64,11 +64,13 @@
 						</div>
 					</div>
 					<div class="filter-option gamma-filter-option">
-						<p>Intensity Level Slicing</p>
-					</div>
-					<div class="filter-option gamma-filter-option">
 						<p>Bit-plane slicing</p>
-						<input type="number" min="1" max="8" value="1" oninput="bitPlaneSlicing(this.value)"oninput=""/>
+						<div class="bit-plane-container">
+							<input class="bit-plane-input" type="number" min="1" max="8" value="1"/>
+							<div class="point-ok-container">
+									<button class= "point-ok" onclick="bitPlaneSlicing()">ok</button>
+							</div>
+						</div>
 					</div>
 					<div id="slidecontainer" class="filter-option gamma-filter-option">
 						<p>Gamma constant:</p>

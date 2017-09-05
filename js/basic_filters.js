@@ -33,7 +33,7 @@ var genericFilter = function() {
 
     window.emptyCanvas = false
 
-	var img
+	var img = {}
 
 	if (document.getElementById("original_cb").checked == true){
 		img = document.querySelector(".image-container .img")
@@ -44,6 +44,7 @@ var genericFilter = function() {
 	}
 	else{
       	if (canvas.toDataURL() == blank.toDataURL()){
+      		console.log(canvas.toDataURL)
       		img = document.querySelector(".image-container .img")
       		if (img.src)
       			document.getElementById('originalh').innerHTML = "Using original image"
@@ -56,21 +57,20 @@ var genericFilter = function() {
 	}
 
 	var ctx = canvas.getContext("2d")
-
+	console.log("TO AQUI")
 	if (window.emptyCanvas) {
 		canvas.width  = img.width
 		canvas.height = img.height
 		ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
 	}
-			
 
 	return ctx.getImageData(0, 0, canvas.width, canvas.height)
-
 };
 
 var blackAndWhite = function() {
 	var imgData = genericFilter()
 	if(imgData){
+
 		for (var i = 0; i < imgData.data.length; i += 4) {
 			var mean = (imgData.data[i] + imgData.data[i+1] + imgData.data[i+2])/3
 			imgData.data[i] = mean
@@ -97,6 +97,7 @@ var negativeBW = function() {
 var negative = function() {
 	var imgData = genericFilter()
 	if(imgData){
+
 		for (var i = 0; i < imgData.data.length; i += 4) {
 			imgData.data[i] = 255 - imgData.data[i]
 			imgData.data[i+1] = 255 - imgData.data[i+1]
@@ -171,13 +172,15 @@ var gamma_range = function(value){
 
 };
 
-var bitPlaneSlicing = function (value) {
+var bitPlaneSlicing = function () {
+	var value = document.querySelector(".bit-plane-input").value
 	var imgData = genericFilter()
 	if(imgData){
 		for (var i = 0; i < imgData.data.length; i += 4) {
-			imgData.data[i] = imgData.data[i]&Math.pow(imgData.data[i],value)
-			imgData.data[i+1] = imgData.data[i+1]&Math.pow(imgData.data[i],value)
-			imgData.data[i+2] = imgData.data[i+2]&Math.pow(imgData.data[i],value)
+			var mean = (imgData.data[i] + imgData.data[i+1] + imgData.data[i+2])/3
+			imgData.data[i] = (mean&Math.pow(2,value-1) ? 255 : 0)
+			imgData.data[i+1] = (mean&Math.pow(2,value-1) ? 255 : 0)
+			imgData.data[i+2] = (mean&Math.pow(2,value-1) ? 255 : 0)
 		}
 		document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
 	}
