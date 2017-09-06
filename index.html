@@ -7,6 +7,7 @@
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script type="text/javascript" src="js/basic_filters.js"></script>
 		<script type="text/javascript" src="js/histogram.js"></script>
+		<script type="text/javascript" src="js/convolution.js"></script>
 	</head>
 	<body>
 		<header class="header-container">
@@ -15,11 +16,15 @@
 		<div class="header-button-container">
 			<button class="header-button" onclick="showFilters()">Filters</button>
 			<button class="header-button" onclick="showHistogram()">Histogram</button>
+			<button class="header-button" onclick="showConvolution()">Convolution</button>
 		</div>
 		<div class="input-container container" >
 			<input type='file' class="file-upload" onchange="readImage(event, this)"/>
 		</div>
 		<div>
+			<div class="convolution-container hidden">
+				<button  onclick="greyHistogram()">Histogram for B&W image</button>
+			</div>
 			<div class="histogram-container hidden">
 				<button  class="pb_histogram" onclick="greyHistogram()">Histogram for B&W image</button>
 				<button  class="pb_histogram" onclick="">Histogram for RGB image</button>

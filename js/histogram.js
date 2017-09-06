@@ -71,9 +71,9 @@ var greyHistogram = function () {
 var globalHistogramEq = function() {
 	var img = document.querySelector(".image-container .img")
 	if(img){
-	    var srcLength = img.src.length;
+	    var srcLength = img.naturalWidth*img.naturalHeight;
 	    var src = img.src
-
+	    
 	    var hist = new Float32Array(256);
 	    for (var i = 0; i < srcLength; ++i) {
 	        ++hist[src[i]];
