@@ -57,7 +57,6 @@ var genericFilter = function() {
 	}
 
 	var ctx = canvas.getContext("2d")
-	console.log("TO AQUI")
 	if (window.emptyCanvas) {
 		canvas.width  = img.width
 		canvas.height = img.height
