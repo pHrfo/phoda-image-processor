@@ -53,6 +53,7 @@ var greyHistogram = function () {
 			data.push([Math.floor(mean)])
 		}
 		window.histogramData = histogram
+		document.querySelector('.chart-div').innerHTML = ""
 		drawChart(data, null)
 	}
 }
