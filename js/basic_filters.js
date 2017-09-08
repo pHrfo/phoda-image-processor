@@ -44,7 +44,6 @@ var genericFilter = function() {
 	}
 	else{
       	if (canvas.toDataURL() == blank.toDataURL()){
-      		console.log(canvas.toDataURL)
       		img = document.querySelector(".image-container .img")
       		if (img.src)
       			document.getElementById('originalh').innerHTML = "Using original image"
@@ -237,12 +236,14 @@ var showFilters = function () {
 	var histogramContainer = document.querySelector('.histogram-container')
 	
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
+	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
 
 
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')
 		document.querySelector('.chart-div').classList.add('hidden')
 	}
+
 
 	if (imageContainer.classList.contains('hidden')){
 		imageContainer.classList.remove('hidden')

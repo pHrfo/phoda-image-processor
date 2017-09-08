@@ -108,7 +108,8 @@ var showHistogram = function () {
 	var imageContainer = document.querySelector('.filter-container')
 
 	Object.assign(document.querySelector('.histogram-container').style,{display:"block"});
-
+	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
+	
 	if (!imageContainer.classList.contains('hidden')){
 		imageContainer.classList.add('hidden')
 		document.querySelector('.canvas').classList.add("hidden")
@@ -121,9 +122,36 @@ var showHistogram = function () {
 
 }
 
+var localHistogramEq = function() {
+	var hist = window.histogramData;
+	var prob_hist = {};
+	var total = 0;
+	var mean_intensity = 0;
+	var intensity_values = 0;
+	var second_moment = 0;
+
+	for (var i=0; i<256; i++) {
+		if (!hist[i])
+			hist[i]=0;
+
+		total += hist[i];
+	}
+
+	for (var i=0; i<256; i++){
+		prob_hist[i] = hist[i]/total;
+		mean_intensity += i*prov_hist[i];
+	}
+
+	for (var i=0; i<256; i++){
+		second_moment += Math.pow(2,hist[i] -mean_intensity)*prob_hist[i]
+	}
+
+	var eqHist = {}
+}
 
 var globalHistogramEq = function() {
 	var imgData = genericFilter()
+
 	var hist = window.histogramData
 	var total = 0
 	for (var i=0; i<256; i++) {

@@ -23,7 +23,22 @@
 		</div>
 		<div>
 			<div class="convolution-container hidden">
-				<button  onclick="greyHistogram()">Histogram for B&W image</button>
+				<div class="filter-option gamma-filter-option" div>
+					<p>Convolution Matrix</p>
+					<input type="number" id="kernelSize" min="1" value="3" step="2">Size of the kernel<br>
+					<input type="number" id="convdivisor" min="0.0000001" value="1" step="1">Divisor<br>
+					<div class="point-ok-container okconv">
+						<button class= "point-ok" onclick="makeTable()">Ok</button>
+					</div>
+					<div class="points">
+						<table class="point-input-header conv_matrix">
+						</table>
+					</div>
+					<div class="point-ok-container applyconv hidden">
+						<button class= "point-ok " onclick="convolute()">Apply Convolution</button>
+					</div>
+				</div>
+				
 			</div>
 			<div class="histogram-container hidden">
 				<button  class="pb_histogram" onclick="greyHistogram()">Histogram for B&W image</button>
