@@ -24,7 +24,7 @@ var showConvolution = function(){
 
 
 var makeTable = function(){
-	var value = document.getElementById('kernelSize').value
+	var value = document.getElementById('convksize').value
 	if (value % 2 == 1){
 		var matrix = document.querySelector('.conv_matrix');
 		matrix.innerHTML = "";
@@ -46,7 +46,7 @@ var makeTable = function(){
 }
 
 var tableToArray = function () {
-	var value = document.getElementById('kernelSize').value
+	var value = document.getElementById('convksize').value
 	if (value % 2 == 1){
 		var table = document.querySelector('.conv_matrix');
 		var tableArr = [];
@@ -166,7 +166,7 @@ var computeMedian = function(img,fKernel){
 }
 
 var medianFilter = function(){
-	var kerneloffset = Math.floor(document.getElementById('kernelSize').value / 2);
+	var kerneloffset = Math.floor(document.getElementById('convksize').value / 2);
 	var img = genericFilter();
 	var w = img.width
 	var h = img.height

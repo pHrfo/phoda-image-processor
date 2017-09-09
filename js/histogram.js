@@ -123,30 +123,58 @@ var showHistogram = function () {
 }
 
 var localHistogramEq = function() {
-	var hist = window.histogramData;
-	var prob_hist = {};
-	var total = 0;
-	var mean_intensity = 0;
-	var intensity_values = 0;
-	var second_moment = 0;
 
-	for (var i=0; i<256; i++) {
-		if (!hist[i])
-			hist[i]=0;
+	var imgData = genericFilter()
+	// var kerneloffset = Math.floor(document.getElementById('histkernelsize').value / 2);
+	var kerneloffset = 1
+	var w = imgData.width
+	var h = imgData.height
 
-		total += hist[i];
+	for(var i = 0; i < h; i++){
+		for(var j = 0; j < w; j++){
+			var fKernel = computePosition(i,j,w,h,kerneloffset)
+			var kCenter = (i * w + j)*4
+			var ijmean = Math.floor((imgData.data[kCenter]
+					+ imgData.data[kCenter+1] +
+					imgData.data[kCenter+2])/3)
+
+			var means = []
+			var eqHist = {}
+			var freqs = {}
+			var total = 0
+			var acc = 0
+
+			for(var k = 0; k < fKernel.length; k++){
+				var mean = Math.floor((imgData.data[fKernel[k]]
+					+ imgData.data[fKernel[k]+1] + imgData.data[fKernel[k]+2])/3)
+				means.push(mean)
+			}
+			var orderedMeans = new Set(means)
+			orderedMeans = Array.from(orderedMeans).sort((a, b) => a - b)
+
+			for(var k = 0; k < means.length;k++){
+				if(!freqs[means[k]]){
+					freqs[means[k]] = 0
+				}
+				freqs[means[k]]++
+				total++
+			}
+
+			for(var k = 0; k < orderedMeans.length;k++){
+				freqs[orderedMeans[k]] = freqs[orderedMeans[k]]/total
+			}
+
+			for(var k = 0; k < orderedMeans.length;k++){
+				acc += freqs[orderedMeans[k]]
+				eqHist[orderedMeans[k]] = Math.floor(255*acc)
+			}
+			imgData.data[kCenter] = eqHist[ijmean]
+			imgData.data[kCenter+1] = eqHist[ijmean]
+			imgData.data[kCenter+2] = eqHist[ijmean]
+		}
 	}
-
-	for (var i=0; i<256; i++){
-		prob_hist[i] = hist[i]/total;
-		mean_intensity += i*prov_hist[i];
-	}
-
-	for (var i=0; i<256; i++){
-		second_moment += Math.pow(2,hist[i] -mean_intensity)*prob_hist[i]
-	}
-
-	var eqHist = {}
+	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
+	document.querySelector('.chart-div').innerHTML = ""
 }
 
 var globalHistogramEq = function() {

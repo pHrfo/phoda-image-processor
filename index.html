@@ -6,8 +6,8 @@
 		<link rel="stylesheet" type="text/css" href="css/index.css">
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script type="text/javascript" src="js/basic_filters.js"></script>
-		<script type="text/javascript" src="js/histogram.js"></script>
 		<script type="text/javascript" src="js/convolution.js"></script>
+		<script type="text/javascript" src="js/histogram.js"></script>
 	</head>
 	<body>
 		<header class="header-container">
@@ -25,7 +25,7 @@
 			<div class="convolution-container hidden">
 				<div class="filter-option gamma-filter-option" div>
 					<p>Convolution Matrix</p>
-					<input type="number" id="kernelSize" min="1" value="3" step="2">Size of the kernel<br>
+					<input type="number" id="convksize" min="1" value="3" step="2">Size of the kernel<br>
 					<input type="number" id="convdivisor" min="0.0000001" value="1" step="1">Divisor<br>
 					<input type="number" id="convoffset" min="0" value="0" step="1">Offset<br>
 					<div class="point-ok-container okconv">
@@ -46,7 +46,7 @@
 				<button  class="pb_histogram" onclick="greyHistogram()">Histogram for B&W image</button>
 				<button  class="pb_histogram" onclick="rgbHistogram()">Histogram for RGB image</button>
 				<button  class="pb_histogram" onclick="globalHistogramEq()">Global histogram equalization</button>
-				<button  class="pb_histogram" onclick="">Local histogram equalization</button>
+				<button  class="pb_histogram" onclick="localHistogramEq()">Local histogram equalization</button>
 			</div>
 			<div class="filter-container hidden">
 				<div class="filter-buttons">	
