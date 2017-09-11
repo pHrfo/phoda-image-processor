@@ -44,7 +44,6 @@ var genericFilter = function() {
 	}
 	else{
       	if (canvas.toDataURL() == blank.toDataURL()){
-      		console.log(canvas.toDataURL)
       		img = document.querySelector(".image-container .img")
       		if (img.src)
       			document.getElementById('originalh').innerHTML = "Using original image"
@@ -57,13 +56,12 @@ var genericFilter = function() {
 	}
 
 	var ctx = canvas.getContext("2d")
-	console.log("TO AQUI")
 	if (window.emptyCanvas) {
 		canvas.width  = img.width
 		canvas.height = img.height
 		ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
 	}
-
+	
 	return ctx.getImageData(0, 0, canvas.width, canvas.height)
 };
 
@@ -238,12 +236,14 @@ var showFilters = function () {
 	var histogramContainer = document.querySelector('.histogram-container')
 	
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
+	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
 
 
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')
 		document.querySelector('.chart-div').classList.add('hidden')
 	}
+
 
 	if (imageContainer.classList.contains('hidden')){
 		imageContainer.classList.remove('hidden')
