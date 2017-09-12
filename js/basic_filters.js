@@ -1,7 +1,7 @@
 window.opt = null
 
 var buffered_img = document.createElement("img");
-var blank = document.createElement('canvas');
+window.blank = document.createElement('canvas');
 
 var readImage = function(event, element) {
 	var file = event.target.files[0]
@@ -22,20 +22,21 @@ var readImage = function(event, element) {
 		document.querySelector('.filter-container').classList.remove('hidden')
 
 };
-var genericFilter = function() {
+var genericFilter = function(useOriginal) {
+	useOriginal = typeof useOriginal !== 'undefined' ? useOriginal : true
 	var canvas = document.querySelector(".canvas")
 
 	if (canvas.classList.contains('hidden'))
 		canvas.classList.remove('hidden')
 
-	blank.width = canvas.width;
-    blank.height = canvas.height;
+	window.blank.width = canvas.width;
+    window.blank.height = canvas.height;
 
     window.emptyCanvas = false
 
 	var img = {}
 
-	if (document.getElementById("original_cb").checked == true){
+	if ((document.getElementById("original_cb").checked == true)||(useOriginal)){
 		img = document.querySelector(".image-container .img")
 		if (img.src)
 			document.getElementById('originalh').innerHTML = "Using original image"
@@ -43,7 +44,7 @@ var genericFilter = function() {
 		window.emptyCanvas = true
 	}
 	else{
-      	if (canvas.toDataURL() == blank.toDataURL()){
+      	if (canvas.toDataURL() == window.blank.toDataURL()){
       		img = document.querySelector(".image-container .img")
       		if (img.src)
       			document.getElementById('originalh').innerHTML = "Using original image"
@@ -56,7 +57,7 @@ var genericFilter = function() {
 	}
 
 	var ctx = canvas.getContext("2d")
-	if (window.emptyCanvas) {
+	if ((window.emptyCanvas)||(useOriginal)) {
 		canvas.width  = img.width
 		canvas.height = img.height
 		ctx.drawImage(img, 0, 0, canvas.width, canvas.height)

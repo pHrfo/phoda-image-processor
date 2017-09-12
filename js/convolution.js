@@ -28,6 +28,7 @@ var makeTable = function(){
 	if (value % 2 == 1){
 		var matrix = document.querySelector('.conv_matrix');
 		matrix.innerHTML = "";
+		matrix.classList.add("convinputmatrix")
 		
 		for(var i = 0; i < value; i++){
 			var row = matrix.insertRow(i);
@@ -37,6 +38,7 @@ var makeTable = function(){
 				var t = document.createElement("input");
 				t.setAttribute("type", "number");
 				t.setAttribute("value", "1");
+				t.classList.add("convinput")
 
 	            cell.appendChild(t);
 			}	
@@ -135,9 +137,9 @@ var computePosition = function(i,j,w,h,kerneloffset){
 	var fKernel = []
 
 	for(var k = i - kerneloffset; k <= i + kerneloffset; k++){
-		if(k >= 0 && k < w){
+		if(k >= 0 && k < h){
 			for(var l = j - kerneloffset; l <= j + kerneloffset; l++){
-				if(l >= 0 && l < h){
+				if(l >= 0 && l < w){
 					fKernel.push((k * w + l) * 4);
 				}
 			}
@@ -171,8 +173,8 @@ var medianFilter = function(){
 	var w = img.width
 	var h = img.height
 
-	for (var i = 0; i< w; i++){
-		for (var j = 0; j < h; j++){
+	for (var i = 0; i< h; i++){
+		for (var j = 0; j < w; j++){
 			var fKernel = computePosition(i, j, w, h, kerneloffset);
 			
 			var median = computeMedian(img,fKernel)

@@ -44,6 +44,15 @@ body {
 
 }
 
+.convinput {
+	max-width: 30px;
+	display: inline-flex;
+}
+
+.convinputmatrix {
+	float:left;
+}
+
 .input-container .file-upload {
 	background-color: #FFFFFF;
 	display: block;
