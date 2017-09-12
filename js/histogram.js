@@ -124,7 +124,7 @@ var showHistogram = function () {
 
 var localHistogramEq = function() {
 
-	var imgData = genericFilter()
+	var imgData = genericFilter(true)
 	// var kerneloffset = Math.floor(document.getElementById('histkernelsize').value / 2);
 	var kerneloffset = 1
 	var w = imgData.width
@@ -178,7 +178,7 @@ var localHistogramEq = function() {
 }
 
 var globalHistogramEq = function() {
-	var imgData = genericFilter()
+	var imgData = genericFilter(true)
 
 	var hist = window.histogramData
 	var total = 0
