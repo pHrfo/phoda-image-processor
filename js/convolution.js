@@ -66,6 +66,9 @@ var tableToArray = function () {
 
 var convolute = function(){
 	var img = genericFilter();
+
+	var imgAux = Array.prototype.slice.call(img.data)
+	console.log(imgAux)
 	// var kernel = [
  //                [0, 0, -1, 0, 0],
  //                [0, 0, -2, 0, 0],
@@ -114,11 +117,12 @@ var convolute = function(){
                     	Then we have the srcIndex.
                     	*/
                     	var srcIndex = (pixelRow * w + pixelCol) * 4;
+                    	//var mean = (imgAux[srcIndex] + imgAux[srcIndex + 1] + imgAux[srcIndex + 2])/3 
                     	// multiplying element value corresponding to pixel value in its four channel 
                     	
-                    	result[0] += img.data[srcIndex] * kVal;
-                    	result[1] += img.data[srcIndex + 1] * kVal;
-                    	result[2] += img.data[srcIndex + 2] * kVal;
+                    	result[0] += imgAux[srcIndex] * kVal;
+                    	result[1] += imgAux[srcIndex + 1] * kVal;
+                    	result[2] += imgAux[srcIndex + 2] * kVal;
                     }
             	}
             }
