@@ -17,27 +17,44 @@
 			<button class="header-button" onclick="showFilters()">Filters</button>
 			<button class="header-button" onclick="showHistogram()">Histogram</button>
 			<button class="header-button" onclick="showConvolution()">Convolution</button>
+			<button class="header-button" onclick="showEnhancing()">Enhancement</button>
+			<button class="header-button" onclick="reset()">Reset</button>
 		</div>
 		<div class="input-container container" >
 			<input type='file' class="file-upload" onchange="readImage(event, this)"/>
 		</div>
 		<div>
 			<div class="convolution-container hidden">
-				<div class="filter-option gamma-filter-option" div>
+				<div class="filter-option convolution-filter-option" div>
 					<p>Convolution Matrix</p>
-					<input type="number" class="convinput" id="convksize" min="1" value="3" step="2">   Size of the kernel<br>
-					<input type="number" class="convinput" id="convdivisor" min="0.0000001" value="1" step="1">Divisor   <br>
-					<input type="number" class="convinput" id="convoffset" min="0" value="0" step="1">   Offset<br>
-					<div class="point-ok-container okconv">
-						<button class= "point-ok" onclick="makeTable()">Ok</button>
-						<button class= "point-ok" onclick="medianFilter()">Median Filter</button>
-					</div>
-					<div class="points">
-						<table class="point-input-header conv_matrix">
-						</table>
-					</div>
-					<div class="point-ok-container applyconv hidden">
-						<button class= "point-ok " onclick="convolute()">Apply Convolution</button>
+					<div class="convolution-options">
+						<div class='convolution-first-showing'>
+							<div class="input-convolution-with-text">
+								<input type="number" class="convinput" id="convksize" min="1" value="3" step="2">
+								<p class="convinput-label">Size of the kernel</p>
+							</div>
+							<div class="input-convolution-with-text">
+								<input type="number" class="convinput" id="convdivisor" min="0" value="1" step="1">
+								<p class="convinput-label">Divisor</p>
+							</div>
+							<div class="input-convolution-with-text">
+								<input type="number" class="convinput" id="convoffset" min="0" value="0" step="1">
+								<p class="convinput-label">Offset</p>
+							</div>
+							<div class="point-ok-container okconv">
+								<button class= "point-ok" onclick="makeTable()">Ok</button>
+								<button class= "point-ok" onclick="medianFilter()">Median Filter</button>
+							</div>
+						</div>
+						<div class="convolution-second-showing">
+							<div class="points">
+								<table class="point-input-header conv_matrix">
+								</table>
+							</div>
+							<div class="point-ok-container applyconv hidden">
+								<button class= "point-ok " onclick="convolute()">Apply Convolution</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				
@@ -47,6 +64,11 @@
 				<button  class="pb_histogram" onclick="rgbHistogram()">Histogram for RGB image</button>
 				<button  class="pb_histogram" onclick="globalHistogramEq()">Global histogram equalization</button>
 				<button  class="pb_histogram" onclick="localHistogramEq()">Local histogram equalization</button>
+			</div>
+			<div class= "enhancing-container hidden">
+				<button  class="pb_histogram" onclick="laplacian()">Laplacian</button>
+				<button  class="pb_histogram" onclick="highboost()">Highboost (c=10)</button>
+				<button  class="pb_histogram" onclick="sobel()">Sobel</button>
 			</div>
 			<div class="filter-container hidden">
 				<div class="filter-buttons">	

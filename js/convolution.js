@@ -5,6 +5,7 @@ var showConvolution = function(){
 	var histogramContainer = document.querySelector('.histogram-container')
 
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
+	Object.assign(document.querySelector('.enhancing-container').style,{display: "none"})
 	Object.assign(document.querySelector('.convolution-container').style,{display:"block"});
 	
 	if (!histogramContainer.classList.contains('hidden')){
@@ -21,6 +22,25 @@ var showConvolution = function(){
 	}
 
 };
+
+var showEnhancing = function () {
+	window.opt = 2;
+	var enhancingContainer = document.querySelector('.enhancing-container')
+	var imageContainer = document.querySelector('.filter-container')
+
+	Object.assign(document.querySelector('.enhancing-container').style,{display: "block"})
+	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
+	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
+	
+	if (!imageContainer.classList.contains('hidden')){
+		imageContainer.classList.add('hidden')
+	} 
+
+	if (enhancingContainer.classList.contains('hidden')){
+		enhancingContainer.classList.remove('hidden')
+	}
+
+}
 
 
 var makeTable = function(){
@@ -40,11 +60,11 @@ var makeTable = function(){
 				t.setAttribute("value", "1");
 				t.classList.add("convinput")
 
-	            cell.appendChild(t);
+				cell.appendChild(t);
 			}	
-        } 
-    	document.querySelector(".applyconv").classList.remove("hidden")
-    } 
+		} 
+		document.querySelector(".applyconv").classList.remove("hidden")
+	} 
 }
 
 var tableToArray = function () {
@@ -64,73 +84,83 @@ var tableToArray = function () {
 	}
 };
 
-var convolute = function(){
+var convolute = function(kernel, divisor, offset, returnBool){
 	var img = genericFilter();
+
+	var imgAux = Array.prototype.slice.call(img.data)
 	// var kernel = [
- //                [0, 0, -1, 0, 0],
- //                [0, 0, -2, 0, 0],
- //                [-1, -2, 9, 0, 0],
- //                [0, 0, 0, 0, 0],
- //                [0, 0, 0, 0, 0],
- //            	]
-	var kernel = tableToArray();
-	var divisor = document.getElementById("convdivisor").value;
-	var offset = document.getElementById("convoffset").value;
+ //				[0, 0, -1, 0, 0],
+ //				[0, 0, -2, 0, 0],
+ //				[-1, -2, 9, 0, 0],
+ //				[0, 0, 0, 0, 0],
+ //				[0, 0, 0, 0, 0],
+ //				]
+	kernel = typeof kernel !== 'undefined' ? kernel : tableToArray();
+	divisor = typeof divisor !== 'undefined' ? divisor : document.getElementById("convdivisor").value;
+	divisor = Number(divisor) //+ 0.0000001
+
+	offset = typeof offset !== 'undefined' ? offset : document.getElementById("convoffset").value;
 	//the kerneloffset variable represents the center of the kernel
 	var kerneloffset = Math.floor(kernel.length / 2);
 	
 	var w = img.width;
-    var h = img.height;
-    var count = 0
-    //for each image row
-    for (var row = 0; row < h; row++) {
-    	//for each pixel
-    	count++;
-        for (var col = 0; col < w; col++) {
-        	//below is the accumulator
-            var result = [0, 0, 0];
-            //for each kernel row
-            for (var kRow = 0; kRow < kernel.length; kRow++) {
-            	//for each kernel value
-            	for (var kCol = 0; kCol < kernel[kRow].length; kCol++) {
-            		var kVal = kernel[kRow][kCol];
-            		
-            		var pixelRow = row + kRow - kerneloffset;
-                    var pixelCol = col + kCol - kerneloffset;
+	var h = img.height;
+	var count = 0
+	//for each image row
+	for (var row = 0; row < h; row++) {
+		//for each pixel
+		count++;
+		for (var col = 0; col < w; col++) {
+			//below is the accumulator
+			var result = [0, 0, 0];
+			//for each kernel row
+			for (var kRow = 0; kRow < kernel.length; kRow++) {
+				//for each kernel value
+				for (var kCol = 0; kCol < kernel[kRow].length; kCol++) {
+					var kVal = kernel[kRow][kCol];
+					
+					var pixelRow = row + kRow - kerneloffset;
+					var pixelCol = col + kCol - kerneloffset;
 
-                    //skip if the calculated pixel is not part of the image
-                    if (pixelRow < 0 || pixelRow >= h || pixelCol < 0 || pixelCol >= w) {
-                        continue;
-                    }
-                    //element position  corresponding to pixel position
-                    else{
-                    	/*
-                    	because img is a flatten array, we need calculate
-                    	the position in which our data is.
-                    	Multiplying the row by the width and summing with the column,
-                    	we could find the field (row/column) where our pixel is, 
-                    	but since our ImageData has 4 channel per "field", 
-                    	we must multiply by 4. 
-                    	Then we have the srcIndex.
-                    	*/
-                    	var srcIndex = (pixelRow * w + pixelCol) * 4;
-                    	// multiplying element value corresponding to pixel value in its four channel 
-                    	
-                    	result[0] += img.data[srcIndex] * kVal;
-                    	result[1] += img.data[srcIndex + 1] * kVal;
-                    	result[2] += img.data[srcIndex + 2] * kVal;
-                    }
-            	}
-            }
-            //now result has the value of that pixel [row,col] in its four channels
-            var dstIndex = (row * w + col) * 4;
-            img.data[dstIndex] = result[0] / divisor + offset;
-            img.data[dstIndex + 1] = result[1] / divisor + offset;
-            img.data[dstIndex + 2] = result[2] / divisor + offset;
-            
-        }
-    }
-    document.querySelector(".canvas").getContext("2d").putImageData(img, 0, 0)
+					//skip if the calculated pixel is not part of the image
+					if (pixelRow < 0 || pixelRow >= h || pixelCol < 0 || pixelCol >= w) {
+						continue;
+					}
+					//element position  corresponding to pixel position
+					else{
+						/*
+						because img is a flatten array, we need calculate
+						the position in which our data is.
+						Multiplying the row by the width and summing with the column,
+						we could find the field (row/column) where our pixel is, 
+						but since our ImageData has 4 channel per "field", 
+						we must multiply by 4. 
+						Then we have the srcIndex.
+						*/
+						var srcIndex = (pixelRow * w + pixelCol) * 4;
+						//var mean = (imgAux[srcIndex] + imgAux[srcIndex + 1] + imgAux[srcIndex + 2])/3 
+						// multiplying element value corresponding to pixel value in its four channel 
+						
+						result[0] += imgAux[srcIndex] * kVal;
+						result[1] += imgAux[srcIndex + 1] * kVal;
+						result[2] += imgAux[srcIndex + 2] * kVal;
+					}
+				}
+			}
+			//now result has the value of that pixel [row,col] in its four channels
+			var dstIndex = (row * w + col) * 4;
+			img.data[dstIndex] = result[0] / divisor + offset;
+			img.data[dstIndex + 1] = result[1] / divisor + offset;
+			img.data[dstIndex + 2] = result[2] / divisor + offset;
+			
+		}
+	}
+	returnBool = typeof returnBool !== 'undefined' ? returnBool : false
+	if (returnBool) {
+		return img
+	}
+
+	document.querySelector(".canvas").getContext("2d").putImageData(img, 0, 0)
 };
 
 var computePosition = function(i,j,w,h,kerneloffset){
@@ -185,5 +215,81 @@ var medianFilter = function(){
 			img.data[kCenter + 2] = median[2]
 		}
 	}
+	document.querySelector(".canvas").getContext("2d").putImageData(img, 0, 0)
+}
+
+var laplacian = function() {
+	var kernel = [
+		[0, -1, 0],
+		[-1, 4, -1],
+		[0, -1, 0]
+	]
+
+	var img = genericFilter(true)
+	var divisor = 1
+	var offset = 0
+
+	var enhancedBorders = convolute(kernel, divisor, offset, true)
+
+	for (var i = 0; i < img.data.length; i += 4) {
+		img.data[i] += enhancedBorders.data[i]
+		img.data[i+1] += enhancedBorders.data[i+1]
+		img.data[i+2] += enhancedBorders.data[i+2]
+	}
+
+	document.querySelector(".canvas").getContext("2d").putImageData(img, 0, 0)
+}
+
+var highboost = function() {
+	var c = 1.5
+
+	var kernel = [
+		[0, -1*c, 0],
+		[-1*c, 4*c, -1*c],
+		[0, -1*c, 0]
+	]
+
+	var img = genericFilter(true)
+	var divisor = 1
+	var offset = 0
+
+	var enhancedBorders = convolute(kernel, divisor, offset, true)
+
+	for (var i = 0; i < img.data.length; i += 4) {
+		img.data[i] += enhancedBorders.data[i]
+		img.data[i+1] += enhancedBorders.data[i+1]
+		img.data[i+2] += enhancedBorders.data[i+2]
+	}
+
+	document.querySelector(".canvas").getContext("2d").putImageData(img, 0, 0)
+}
+
+var sobel = function() {
+	var hkernel = [
+		[-1, -2, -1],
+		[0, 0, 0],
+		[1, 2, 1]
+	]
+
+	var img = genericFilter(true)
+	var divisor = 1
+	var offset = 0
+
+	var horizontalBorders = convolute(hkernel, divisor, offset, true)
+
+	var vkernel = [
+		[-1, 0, 1],
+		[-2, 0, 2],
+		[-1, 0, 1]
+	]
+
+	var verticalBorders = convolute(vkernel, divisor, offset, true)
+
+	for (var i = 0; i < img.data.length; i += 4) {
+		img.data[i] += horizontalBorders.data[i] + verticalBorders.data[i]
+		img.data[i+1] += horizontalBorders.data[i+1] + verticalBorders.data[i+1]
+		img.data[i+2] += horizontalBorders.data[i+2] + verticalBorders.data[i+2]
+	}
+
 	document.querySelector(".canvas").getContext("2d").putImageData(img, 0, 0)
 }

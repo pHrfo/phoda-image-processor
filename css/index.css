@@ -45,12 +45,23 @@ body {
 }
 
 .convinput {
-	max-width: 30px;
+	max-width: 60px;
+	max-height: 21px;
 	display: inline-flex;
+}
+
+.convinput-label {
+	padding-left: 5px;
 }
 
 .convinputmatrix {
 	float:left;
+}
+
+.input-convolution-with-text {
+	display: inline-flex;
+	width: 100%;
+	float: center;
 }
 
 .input-container .file-upload {
@@ -166,6 +177,10 @@ body {
 	padding-top: 10px;
 }
 
+.enhancing-container {
+	padding-top: 10px;
+}
+
 .pb_histogram {
 	display: inline-block;
     padding: 6px 20px 8px 20px;
@@ -180,6 +195,19 @@ body {
     border: 2px solid rgba(0,0,0,0.1);
     border-radius: 50px;
     width: 20%;
+}
+
+.convolution-container {
+	padding-top: 10px;
+}
+
+.convolution-options {
+	display: inline-flex;
+	max-width: 100%;
+}
+
+.convolution-first-showing {
+	display: block
 }
 
 .gamma-filter-option {

@@ -8,7 +8,8 @@ var readImage = function(event, element) {
 	var reader = new FileReader()
 
 	var imageContainer = document.querySelector('.image-container.hidden')
-	imageContainer.classList.remove('hidden')
+	if (imageContainer)
+		imageContainer.classList.remove('hidden')
 
 	var image = document.querySelector('.image-container .img')
 
@@ -17,13 +18,10 @@ var readImage = function(event, element) {
 	}
 
 	reader.readAsDataURL(file)
-	
-	if(window.opt == 1)
-		document.querySelector('.filter-container').classList.remove('hidden')
 
 };
 var genericFilter = function(useOriginal) {
-	useOriginal = typeof useOriginal !== 'undefined' ? useOriginal : true
+	useOriginal = typeof useOriginal !== 'undefined' ? useOriginal : false
 	var canvas = document.querySelector(".canvas")
 
 	if (canvas.classList.contains('hidden'))
@@ -65,6 +63,12 @@ var genericFilter = function(useOriginal) {
 	
 	return ctx.getImageData(0, 0, canvas.width, canvas.height)
 };
+
+var reset = function() {
+	var imgData = genericFilter(true)
+	document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
+} 
+
 
 var blackAndWhite = function() {
 	var imgData = genericFilter()
@@ -238,6 +242,7 @@ var showFilters = function () {
 	
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
 	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
+	Object.assign(document.querySelector('.enhancing-container').style,{display:"none"});
 
 
 	if (!histogramContainer.classList.contains('hidden')){
