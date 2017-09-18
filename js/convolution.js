@@ -97,7 +97,7 @@ var convolute = function(kernel, divisor, offset, returnBool){
  //				]
 	kernel = typeof kernel !== 'undefined' ? kernel : tableToArray();
 	divisor = typeof divisor !== 'undefined' ? divisor : document.getElementById("convdivisor").value;
-	divisor = Number(divisor) //+ 0.0000001
+	divisor = Number(divisor) + 0.0000001
 
 	offset = typeof offset !== 'undefined' ? offset : document.getElementById("convoffset").value;
 	//the kerneloffset variable represents the center of the kernel
