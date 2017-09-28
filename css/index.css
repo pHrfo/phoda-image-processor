@@ -197,7 +197,7 @@ body {
     width: 20%;
 }
 
-.convolution-container {
+.convolution-container .resize-container{
 	padding-top: 10px;
 }
 

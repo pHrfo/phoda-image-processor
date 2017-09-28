@@ -23,6 +23,26 @@ var showConvolution = function(){
 
 };
 
+var showResize = function(){
+	window.opt = 2;
+	var resizeContainer = document.querySelector('.resize-container')
+	var imageContainer = document.querySelector('.filter-container')
+	Object.assign(resizeContainer.style,{display: "block"})
+	Object.assign(document.querySelector('.enhancing-container').style,{display: "none"})
+	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
+	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
+
+
+	if (!imageContainer.classList.contains('hidden')){
+		imageContainer.classList.add('hidden')
+	} 
+
+	if (resizeContainer.classList.contains('hidden')){
+		resizeContainer.classList.remove('hidden')
+	}
+
+}
+
 var showEnhancing = function () {
 	window.opt = 2;
 	var enhancingContainer = document.querySelector('.enhancing-container')
@@ -40,6 +60,30 @@ var showEnhancing = function () {
 		enhancingContainer.classList.remove('hidden')
 	}
 
+}
+
+
+var resize_img = function(){
+	var size = document.getElementById('down_size').valueAsNumber;
+	var useMedian = document.getElementById('resize_median').checked;
+	var img = genericFilter();
+
+	var columns = Math.floor(img.width/size);
+	var rows = Math.floor(img.height/size);
+
+	var canvas = document.createElement('canvas');
+	var n_img = canvas.getContext("2d").createImageData(columns, rows);
+
+	for(var y = 0; y < rows; y+=size) {
+		// loop through each column
+		for(var x = 0; x < columns; x+=size) {
+			var index = ((columns * y) + x) * 4;
+			n_img.data[index] = img.data[((columns * y) + x) * 4];
+			n_img.data[index + 1] = img.data[index + 1];
+			n_img.data[index + 2] = img.data[index + 2];
+		}
+	}
+	document.querySelector(".canvas").getContext("2d").putImageData(n_img, 0, 0);
 }
 
 
