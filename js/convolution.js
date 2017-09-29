@@ -72,18 +72,26 @@ var resize_img = function(){
 	var rows = Math.floor(img.height/size);
 
 	var canvas = document.createElement('canvas');
+
 	var n_img = canvas.getContext("2d").createImageData(columns, rows);
 
-	for(var y = 0; y < rows; y+=size) {
+	for(var y = 0; y < img.height; y+=size) {
 		// loop through each column
-		for(var x = 0; x < columns; x+=size) {
-			var index = ((columns * y) + x) * 4;
-			n_img.data[index] = img.data[((columns * y) + x) * 4];
-			n_img.data[index + 1] = img.data[index + 1];
-			n_img.data[index + 2] = img.data[index + 2];
+		for(var x = 0; x < img.width; x+=size) {
+			var index = ((img.width * y) + x) * 4;
+			
+			n_img.data[Math.floor(index/size)] = img.data[index];
+			n_img.data[Math.floor(index/size) + 1] = img.data[index + 1];
+			n_img.data[Math.floor(index/size) + 2] = img.data[index + 2];
+			// break;
 		}
+		// break;
+
 	}
-	document.querySelector(".canvas").getContext("2d").putImageData(n_img, 0, 0);
+	var c = document.querySelector(".canvas");
+	c.height = rows;
+	c.width = columns;
+	c.getContext("2d").putImageData(n_img, 0, 0);
 }
 
 
