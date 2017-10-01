@@ -65,56 +65,57 @@ var showEnhancing = function () {
 
 var resize_img = function(){
 	var size = document.getElementById('down_size').valueAsNumber;
+	console.log(size)
 	var useMedian = document.getElementById('resize_median').checked;
 	var img = genericFilter();
-	var columns = Math.floor(img.width/size);
-	var rows = Math.floor(img.height/size);
+	var canv = document.querySelector(".canvas");
+	var columns = Math.round(img.width/size);
+	var rows = Math.round(img.height/size);
 	var kerneloffset = size%2 == 0 ? 0 : Math.floor(size/2);
-	var canvas = document.createElement('canvas');
 
-	var n_img = canvas.getContext("2d").createImageData(columns, rows);
+	var n_img = canv.getContext("2d").createImageData(columns, rows);
 
-	for(var y = 0; y < canvas.height; y+=size) {
-		// loop through each column
-		for(var x = 0; x < canvas.width; x+=size) {
-			if(useMedian){				
-				for(var krow = 0; krow < size; krow++){
-					for(var kcol = 0; kcol < size; kcol++){
-						var pixelRow = y + krow - kerneloffset;
-						var pixelCol = x + kcol - kerneloffset;
+	var pos = 0;
+	var kernelLen = {}
+	for (var y = 0; y < canv.height; y+=size) {
+		for (var x = 0; x < canv.width; x+=size) {
+			var index = ((canv.width * y) + x) * 4;
 
-						var fKernel = computePosition(krow, kcol, img.width,img.height, kerneloffset);
-						var kCenter = (krow * img.width + kcol) * 4
-						var mean = {r:0,g:0,b:0};
-						
-						for(var f = 0; f < fKernel.length; f++){
-							mean.r += img.data[fKernel[f]]
-							mean.g += img.data[fKernel[f] + 1]
-							mean.b += img.data[fKernel[f] + 2]
-						}
+			if(useMedian){	
+				if (pos < 100)	
+					console.log('to aqui')
+				fKernel = computeResizeKernel(y,x,size,canv.width,canv.height)
+				mean = {r:0, g:0, b:0}
 
-						img.data[kCenter] = mean.r/(fKernel.length);
-						img.data[kCenter + 1] = mean.g/(fKernel.length);
-						img.data[kCenter + 2] = mean.b/(fKernel.length);
-					}
+				if (kernelLen[fKernel.length] === undefined)
+					kernelLen[fKernel.length] = 0
+
+				kernelLen[fKernel.length]+=1
+
+				for(var f = 0; f < fKernel.length; f++){
+					mean.r += img.data[fKernel[f]]
+					mean.g += img.data[fKernel[f] + 1]
+					mean.b += img.data[fKernel[f] + 2]
 				}
-			}
-			else{
-				var index = ((canvas.width * y) + x) * 4;
-				n_img.data[Math.floor(index/size)] = img.data[index];
-				n_img.data[Math.floor(index/size) + 1] = img.data[index + 1];
-				n_img.data[Math.floor(index/size) + 2] = img.data[index + 2];
-			}
-			// break;
+
+				n_img.data[pos++] = mean.r/(fKernel.length);
+				n_img.data[pos++] = mean.g/(fKernel.length);
+				n_img.data[pos++] = mean.b/(fKernel.length);
+				n_img.data[pos++] = img.data[index+3];
+			}	
+
+			else {				
+				n_img.data[pos++] = img.data[index];
+				n_img.data[pos++] = img.data[index+1];
+				n_img.data[pos++] = img.data[index+2];
+				n_img.data[pos++] = img.data[index+3];
+			}	
 		}
-		// break;
-
 	}
-
-	var c = document.querySelector(".canvas");
-	c.getContext("2d").clearRect(0, 0, c.width, c.height);
-	console.log(n_img)
-	c.getContext("2d").putImageData(n_img, 0, 0)
+	console.log(kernelLen)
+	console.log(n_img.data)
+	canv.getContext("2d").clearRect(0, 0, canv.width, canv.height);
+	canv.getContext("2d").putImageData(n_img, 0, 0)
 	// c.toBlob(function(blob) {
 	// saveAs(blob, "screenshot.png");
 	// }, "image/png");
@@ -252,6 +253,19 @@ var computePosition = function(i,j,w,h,kerneloffset){
 		}
 	}
 	return fKernel;
+}
+
+var computeResizeKernel = function(row,col,size, w,h) {
+	fKernel = []
+	for (var k = 0; k < size; k++)
+		for (var l = 0; l < size; l++) {
+			var index = ((w * (row+k)) + (col+l)) * 4;
+			if ((row < h)&&(col < w)) {
+				fKernel.push(index)
+			}
+		}
+	return fKernel
+
 }
 
 var computeMedian = function(img,fKernel){
