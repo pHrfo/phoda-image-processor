@@ -110,7 +110,7 @@ var showHistogram = function () {
 	Object.assign(document.querySelector('.histogram-container').style,{display:"block"});
 	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
 	Object.assign(document.querySelector('.enhancing-container').style,{display:"none"})
-	
+	Object.assign(document.querySelector(".resize-container").style,{display:"none"});
 	if (!imageContainer.classList.contains('hidden')){
 		imageContainer.classList.add('hidden')
 		document.querySelector('.canvas').classList.add("hidden")

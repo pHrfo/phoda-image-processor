@@ -7,7 +7,8 @@ var showConvolution = function(){
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
 	Object.assign(document.querySelector('.enhancing-container').style,{display: "none"})
 	Object.assign(document.querySelector('.convolution-container').style,{display:"block"});
-	
+	Object.assign(document.querySelector(".resize-container").style,{display:"none"});
+
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')
 		document.querySelector('.chart-div').classList.add('hidden')
@@ -51,7 +52,7 @@ var showEnhancing = function () {
 	Object.assign(document.querySelector('.enhancing-container').style,{display: "block"})
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
 	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
-	
+	Object.assign(document.querySelector(".resize-container").style,{display:"none"});
 	if (!imageContainer.classList.contains('hidden')){
 		imageContainer.classList.add('hidden')
 	} 
@@ -62,36 +63,61 @@ var showEnhancing = function () {
 
 }
 
-
 var resize_img = function(){
 	var size = document.getElementById('down_size').valueAsNumber;
 	var useMedian = document.getElementById('resize_median').checked;
 	var img = genericFilter();
-
 	var columns = Math.floor(img.width/size);
 	var rows = Math.floor(img.height/size);
-
+	var kerneloffset = size%2 == 0 ? 0 : Math.floor(size/2);
 	var canvas = document.createElement('canvas');
 
 	var n_img = canvas.getContext("2d").createImageData(columns, rows);
 
-	for(var y = 0; y < img.height; y+=size) {
+	for(var y = 0; y < canvas.height; y+=size) {
 		// loop through each column
-		for(var x = 0; x < img.width; x+=size) {
-			var index = ((img.width * y) + x) * 4;
-			
-			n_img.data[Math.floor(index/size)] = img.data[index];
-			n_img.data[Math.floor(index/size) + 1] = img.data[index + 1];
-			n_img.data[Math.floor(index/size) + 2] = img.data[index + 2];
+		for(var x = 0; x < canvas.width; x+=size) {
+			if(useMedian){				
+				for(var krow = 0; krow < size; krow++){
+					for(var kcol = 0; kcol < size; kcol++){
+						var pixelRow = y + krow - kerneloffset;
+						var pixelCol = x + kcol - kerneloffset;
+
+						var fKernel = computePosition(krow, kcol, img.width,img.height, kerneloffset);
+						var kCenter = (krow * img.width + kcol) * 4
+						var mean = {r:0,g:0,b:0};
+						
+						for(var f = 0; f < fKernel.length; f++){
+							mean.r += img.data[fKernel[f]]
+							mean.g += img.data[fKernel[f] + 1]
+							mean.b += img.data[fKernel[f] + 2]
+						}
+
+						img.data[kCenter] = mean.r/(fKernel.length);
+						img.data[kCenter + 1] = mean.g/(fKernel.length);
+						img.data[kCenter + 2] = mean.b/(fKernel.length);
+					}
+				}
+			}
+			else{
+				var index = ((canvas.width * y) + x) * 4;
+				n_img.data[Math.floor(index/size)] = img.data[index];
+				n_img.data[Math.floor(index/size) + 1] = img.data[index + 1];
+				n_img.data[Math.floor(index/size) + 2] = img.data[index + 2];
+			}
 			// break;
 		}
 		// break;
 
 	}
+
 	var c = document.querySelector(".canvas");
-	c.height = rows;
-	c.width = columns;
-	c.getContext("2d").putImageData(n_img, 0, 0);
+	c.getContext("2d").clearRect(0, 0, c.width, c.height);
+	console.log(n_img)
+	c.getContext("2d").putImageData(n_img, 0, 0)
+	// c.toBlob(function(blob) {
+	// saveAs(blob, "screenshot.png");
+	// }, "image/png");
 }
 
 
@@ -157,11 +183,9 @@ var convolute = function(kernel, divisor, offset, returnBool){
 	
 	var w = img.width;
 	var h = img.height;
-	var count = 0
 	//for each image row
 	for (var row = 0; row < h; row++) {
 		//for each pixel
-		count++;
 		for (var col = 0; col < w; col++) {
 			//below is the accumulator
 			var result = [0, 0, 0];
