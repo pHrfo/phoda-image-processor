@@ -64,6 +64,17 @@ body {
 	float: center;
 }
 
+.input-resize-with-text {
+	display: inline-flex;
+	width: 100%;
+	float: center;
+}
+
+#down_size {
+	max-width: 40px;
+	max-height: 21px;
+}
+
 .input-container .file-upload {
 	background-color: #FFFFFF;
 	display: block;
@@ -181,6 +192,10 @@ body {
 	padding-top: 10px;
 }
 
+.frequency-container {
+	padding-top: 10px;
+}
+
 .pb_histogram {
 	display: inline-block;
     padding: 6px 20px 8px 20px;
@@ -197,7 +212,7 @@ body {
     width: 20%;
 }
 
-.convolution-container {
+.convolution-container .resize-container{
 	padding-top: 10px;
 }
 
@@ -230,4 +245,8 @@ body {
 
 .chart-div {
 	width: auto;
+}
+
+.applyResize {
+	width: 50%;
 }

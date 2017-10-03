@@ -7,7 +7,9 @@ var showConvolution = function(){
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
 	Object.assign(document.querySelector('.enhancing-container').style,{display: "none"})
 	Object.assign(document.querySelector('.convolution-container').style,{display:"block"});
-	
+	Object.assign(document.querySelector(".resize-container").style,{display:"none"});
+	Object.assign(document.querySelector(".frequency-container").style,{display:"none"})
+
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')
 		document.querySelector('.chart-div').classList.add('hidden')
@@ -23,6 +25,27 @@ var showConvolution = function(){
 
 };
 
+var showResize = function(){
+	window.opt = 2;
+	var resizeContainer = document.querySelector('.resize-container')
+	var imageContainer = document.querySelector('.filter-container')
+	Object.assign(resizeContainer.style,{display: "block"})
+	Object.assign(document.querySelector('.enhancing-container').style,{display: "none"})
+	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
+	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
+	Object.assign(document.querySelector(".frequency-container").style,{display:"none"})
+
+
+	if (!imageContainer.classList.contains('hidden')){
+		imageContainer.classList.add('hidden')
+	} 
+
+	if (resizeContainer.classList.contains('hidden')){
+		resizeContainer.classList.remove('hidden')
+	}
+
+}
+
 var showEnhancing = function () {
 	window.opt = 2;
 	var enhancingContainer = document.querySelector('.enhancing-container')
@@ -31,7 +54,8 @@ var showEnhancing = function () {
 	Object.assign(document.querySelector('.enhancing-container').style,{display: "block"})
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
 	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
-	
+	Object.assign(document.querySelector(".resize-container").style,{display:"none"});
+	Object.assign(document.querySelector(".frequency-container").style,{display:"none"})
 	if (!imageContainer.classList.contains('hidden')){
 		imageContainer.classList.add('hidden')
 	} 
@@ -40,6 +64,64 @@ var showEnhancing = function () {
 		enhancingContainer.classList.remove('hidden')
 	}
 
+}
+
+var resize_img = function(){
+	var size = document.getElementById('down_size').valueAsNumber;
+	console.log(size)
+	var useMedian = document.getElementById('resize_median').checked;
+	var img = genericFilter();
+	var canv = document.querySelector(".canvas");
+	var columns = Math.round(img.width/size);
+	var rows = Math.round(img.height/size);
+	var kerneloffset = size%2 == 0 ? 0 : Math.floor(size/2);
+
+	var n_img = canv.getContext("2d").createImageData(columns, rows);
+
+	var pos = 0;
+	var kernelLen = {}
+	for (var y = 0; y < canv.height; y+=size) {
+		for (var x = 0; x < canv.width; x+=size) {
+			var index = ((canv.width * y) + x) * 4;
+
+			if(useMedian){	
+				if (pos < 100)	
+					console.log('to aqui')
+				fKernel = computeResizeKernel(y,x,size,canv.width,canv.height)
+				mean = {r:0, g:0, b:0}
+
+				if (kernelLen[fKernel.length] === undefined)
+					kernelLen[fKernel.length] = 0
+
+				kernelLen[fKernel.length]+=1
+
+				for(var f = 0; f < fKernel.length; f++){
+					mean.r += img.data[fKernel[f]]
+					mean.g += img.data[fKernel[f] + 1]
+					mean.b += img.data[fKernel[f] + 2]
+				}
+
+				n_img.data[pos++] = mean.r/(fKernel.length);
+				n_img.data[pos++] = mean.g/(fKernel.length);
+				n_img.data[pos++] = mean.b/(fKernel.length);
+				n_img.data[pos++] = img.data[index+3];
+			}	
+
+			else {				
+				n_img.data[pos++] = img.data[index];
+				n_img.data[pos++] = img.data[index+1];
+				n_img.data[pos++] = img.data[index+2];
+				n_img.data[pos++] = img.data[index+3];
+			}	
+		}
+	}
+	console.log(kernelLen)
+	console.log(n_img.data)
+	canv.getContext("2d").clearRect(0, 0, canv.width, canv.height);
+	canv.getContext("2d").putImageData(n_img, 0, 0)
+	// c.toBlob(function(blob) {
+	// saveAs(blob, "screenshot.png");
+	// }, "image/png");
 }
 
 
@@ -84,8 +166,8 @@ var tableToArray = function () {
 	}
 };
 
-var convolute = function(kernel, divisor, offset, returnBool){
-	var img = genericFilter();
+var convolute = function(kernel, divisor, offset, returnBool, imgData){
+	var img = imgData != undefined ? imgData : genericFilter();
 
 	var imgAux = Array.prototype.slice.call(img.data)
 	// var kernel = [
@@ -105,11 +187,9 @@ var convolute = function(kernel, divisor, offset, returnBool){
 	
 	var w = img.width;
 	var h = img.height;
-	var count = 0
 	//for each image row
 	for (var row = 0; row < h; row++) {
 		//for each pixel
-		count++;
 		for (var col = 0; col < w; col++) {
 			//below is the accumulator
 			var result = [0, 0, 0];
@@ -176,6 +256,19 @@ var computePosition = function(i,j,w,h,kerneloffset){
 		}
 	}
 	return fKernel;
+}
+
+var computeResizeKernel = function(row,col,size, w,h) {
+	fKernel = []
+	for (var k = 0; k < size; k++)
+		for (var l = 0; l < size; l++) {
+			var index = ((w * (row+k)) + (col+l)) * 4;
+			if ((row < h)&&(col < w)) {
+				fKernel.push(index)
+			}
+		}
+	return fKernel
+
 }
 
 var computeMedian = function(img,fKernel){

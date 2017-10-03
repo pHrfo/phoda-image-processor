@@ -60,7 +60,6 @@ var genericFilter = function(useOriginal) {
 		canvas.height = img.height
 		ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
 	}
-	
 	return ctx.getImageData(0, 0, canvas.width, canvas.height)
 };
 
@@ -243,7 +242,9 @@ var showFilters = function () {
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
 	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
 	Object.assign(document.querySelector('.enhancing-container').style,{display:"none"});
-
+	Object.assign(document.querySelector(".resize-container").style,{display:"none"});
+	Object.assign(document.querySelector(".frequency-container").style,{display:"none"})
+	
 
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')
