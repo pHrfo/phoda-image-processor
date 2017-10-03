@@ -64,6 +64,17 @@ body {
 	float: center;
 }
 
+.input-resize-with-text {
+	display: inline-flex;
+	width: 100%;
+	float: center;
+}
+
+#down_size {
+	max-width: 40px;
+	max-height: 21px;
+}
+
 .input-container .file-upload {
 	background-color: #FFFFFF;
 	display: block;
@@ -178,6 +189,10 @@ body {
 }
 
 .enhancing-container {
+	padding-top: 10px;
+}
+
+.frequency-container {
 	padding-top: 10px;
 }
 

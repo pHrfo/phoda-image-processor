@@ -63,11 +63,17 @@
 				</div>
 				
 			</div>
+			<div class="frequency-container hidden">
+				<button  class="pb_histogram" onclick="lowpass()">Low-pass</button>
+				<button  class="pb_histogram" onclick="highpass()">High-pass</button>
+				<button  class="pb_histogram" onclick="globalHistogramEq()">Global histogram equalization</button>
+				<button  class="pb_histogram" onclick="localHistogramEq()">Local histogram equalization</button>
+			</div>
 			<div class="resize-container hidden">
 				<div class="filter-option convolution-filter-option" div>
 					<div class="convolution-options">
 						<div class='convolution-first-showing'>
-							<div class="input-convolution-with-text">
+							<div class="input-resize-with-text">
 								<input type="number" id="down_size" min="1" value="1" step="1">
 								<p class="convinput-label">x small</p>
 							</div>
