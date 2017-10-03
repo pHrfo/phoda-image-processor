@@ -66,8 +66,8 @@
 			<div class="frequency-container hidden">
 				<button  class="pb_histogram" onclick="lowpass()">Low-pass</button>
 				<button  class="pb_histogram" onclick="highpass()">High-pass</button>
-				<button  class="pb_histogram" onclick="globalHistogramEq()">Global histogram equalization</button>
-				<button  class="pb_histogram" onclick="localHistogramEq()">Local histogram equalization</button>
+				<button  class="pb_histogram" onclick="bandpass()">Band Pass</button>
+				<button  class="pb_histogram" onclick="bandreject()">Band Reject</button>
 			</div>
 			<div class="resize-container hidden">
 				<div class="filter-option convolution-filter-option" div>
@@ -78,7 +78,7 @@
 								<p class="convinput-label">x small</p>
 							</div>
 							<input type="checkbox" id="resize_median">Use median filter<br>
-							<button  class="pb_histogram" onclick="resize_img()">Apply</button>
+							<button  class="pb_histogram applyResize" onclick="resize_img()">Apply</button>
 						</div>
 					</div>
 				</div>

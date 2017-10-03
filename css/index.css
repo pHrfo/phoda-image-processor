@@ -246,3 +246,7 @@ body {
 .chart-div {
 	width: auto;
 }
+
+.applyResize {
+	width: 50%;
+}

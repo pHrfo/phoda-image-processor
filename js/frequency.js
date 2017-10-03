@@ -51,3 +51,65 @@ var highpass = function() {
 	document.querySelector(".canvas").getContext("2d").putImageData(highpassed, 0, 0)
 
 }
+
+var bandreject = function() {
+	var kernel = [
+		[-1,-1,-1],
+		[-1, 8,-1],
+		[-1,-1,-1]
+	]
+	var divisor = 1
+	var offset = 0
+
+	var highpassed = convolute(kernel, divisor, offset, true)
+
+	kernel = [
+		[1, 4, 7, 4, 1],
+		[4, 16, 26, 16, 4],
+		[7, 26, 41, 26, 7],
+		[4, 16, 26, 16, 4],
+		[1, 4, 7, 4, 1]
+	]
+
+	divisor = 273
+	offset = 0
+
+	var lowpassed = convolute(kernel, divisor, offset, true)
+
+	var img = genericFilter(true)
+
+	for (var i = 0; i < img.data.length; i += 4) {
+		img.data[i] = lowpassed.data[i] + highpassed.data[i]
+		img.data[i+1] = lowpassed.data[i+1] + highpassed.data[i+1]
+		img.data[i+2] = lowpassed.data[i+2] + highpassed.data[i+2]
+	}
+
+	document.querySelector(".canvas").getContext("2d").putImageData(img, 0, 0)
+}
+
+var bandpass = function() {
+	var kernel = [
+		[1, 4, 7, 4, 1],
+		[4, 16, 26, 16, 4],
+		[7, 26, 41, 26, 7],
+		[4, 16, 26, 16, 4],
+		[1, 4, 7, 4, 1]
+	]
+
+	var divisor = 273
+	var offset = 0
+
+	var lowpassed = convolute(kernel, divisor, offset, true)
+
+	var kernel = [
+		[-1,-1,-1],
+		[-1, 8,-1],
+		[-1,-1,-1]
+	]
+	var divisor = 1
+	var offset = 0
+
+	var highpassed = convolute(kernel, divisor, offset, true, lowpassed)
+
+	document.querySelector(".canvas").getContext("2d").putImageData(highpassed, 0, 0)
+}

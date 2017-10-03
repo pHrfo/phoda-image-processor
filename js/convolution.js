@@ -33,6 +33,7 @@ var showResize = function(){
 	Object.assign(document.querySelector('.enhancing-container').style,{display: "none"})
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
 	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
+	Object.assign(document.querySelector(".frequency-container").style,{display:"none"})
 
 
 	if (!imageContainer.classList.contains('hidden')){
@@ -54,6 +55,7 @@ var showEnhancing = function () {
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
 	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
 	Object.assign(document.querySelector(".resize-container").style,{display:"none"});
+	Object.assign(document.querySelector(".frequency-container").style,{display:"none"})
 	if (!imageContainer.classList.contains('hidden')){
 		imageContainer.classList.add('hidden')
 	} 
@@ -164,8 +166,8 @@ var tableToArray = function () {
 	}
 };
 
-var convolute = function(kernel, divisor, offset, returnBool){
-	var img = genericFilter();
+var convolute = function(kernel, divisor, offset, returnBool, imgData){
+	var img = imgData != undefined ? imgData : genericFilter();
 
 	var imgAux = Array.prototype.slice.call(img.data)
 	// var kernel = [
