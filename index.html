@@ -68,6 +68,33 @@
 				<button  class="pb_histogram" onclick="highpass()">High-pass</button>
 				<button  class="pb_histogram" onclick="bandpass()">Band Pass</button>
 				<button  class="pb_histogram" onclick="bandreject()">Band Reject</button>
+				<div class='convolution-first-showing'>
+					<div class="input-resize-with-text">
+						<input type="number" id="m_value" min="1" value="1" step="1">
+						<p class="convinput-label">m</p>
+					</div>
+					<div class="input-resize-with-text">
+						<input type="number" id="n_value" min="1" value="1" step="1">
+						<p class="convinput-label">n</p>
+					</div>
+					<div class="input-resize-with-text">
+						<input type="number" id="q_value" value="1" step="1">
+						<p class="convinput-label">q</p>
+					</div>
+					<div class="input-resize-with-text">
+						<input type="number" id="d_value" value="1" step="1">
+						<p class="convinput-label">d</p>
+					</div>
+					<input type="radio" name="meanFilter" value="0"> Arithmetic mean<br>
+					<input type="radio" name="meanFilter" value="1"> Harmonic mean<br>
+					<input type="radio" name="meanFilter" value="2"> Geometric mean<br>
+					<input type="radio" name="meanFilter" value="3"> Contraharmonic mean<br>
+					<input type="radio" name="meanFilter" value="4"> Max<br>
+					<input type="radio" name="meanFilter" value="5"> Min<br>
+					<input type="radio" name="meanFilter" value="6"> Midpoint<br>
+					<input type="radio" name="meanFilter" value="7"> Alpha-trimmed mean<br>
+					<button  class="pb_histogram applyResize" onclick="meanFilters()">Apply</button>
+				</div>
 			</div>
 			<div class="resize-container hidden">
 				<div class="filter-option convolution-filter-option" div>
