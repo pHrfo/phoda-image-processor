@@ -5,11 +5,12 @@
 		<meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="css/index.css">
 		<!-- <script type="text/javascript" src="js/FileSaver.min.js"></script> -->
-		<script type="text/javascript" src="js/frequency.js"></script>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script type="text/javascript" src="js/basic_filters.js"></script>
 		<script type="text/javascript" src="js/convolution.js"></script>
 		<script type="text/javascript" src="js/histogram.js"></script>
+		<script type="text/javascript" src="js/frequency.js"></script>
+		<script type="text/javascript" src="js/adaptative.js"></script>
 	</head>
 	<body>
 		<header class="header-container">
@@ -22,6 +23,7 @@
 			<button class="header-button" onclick="showEnhancing()">Enhancement</button>
 			<button class="header-button" onclick="showResize()">Resize</button>
 			<button class="header-button" onclick="showFFilters()">Frequency Filters</button>
+			<button class="header-button" onclick="showAdaptative()">Adaptative Filters</button>
 			<button class="header-button" onclick="reset()">Reset</button>
 		</div>
 		<div class="input-container container" >
@@ -68,6 +70,29 @@
 				<button  class="pb_histogram" onclick="highpass()">High-pass</button>
 				<button  class="pb_histogram" onclick="bandpass()">Band Pass</button>
 				<button  class="pb_histogram" onclick="bandreject()">Band Reject</button>
+				<div class='convolution-first-showing'>
+					<div class="input-resize-with-text">
+						<input type="number" id="w_value" min="1" value="1" step="1">
+						<p class="convinput-label">window size</p>
+					</div>
+					<div class="input-resize-with-text">
+						<input type="number" id="q_value" value="1" step="1">
+						<p class="convinput-label">q</p>
+					</div>
+					<div class="input-resize-with-text">
+						<input type="number" id="d_value" value="1" step="1">
+						<p class="convinput-label">d</p>
+					</div>
+					<input type="radio" name="meanFilter" value="0"> Arithmetic mean<br>
+					<input type="radio" name="meanFilter" value="1"> Harmonic mean<br>
+					<input type="radio" name="meanFilter" value="2"> Geometric mean<br>
+					<input type="radio" name="meanFilter" value="3"> Contraharmonic mean<br>
+					<input type="radio" name="meanFilter" value="4"> Max<br>
+					<input type="radio" name="meanFilter" value="5"> Min<br>
+					<input type="radio" name="meanFilter" value="6"> Midpoint<br>
+					<input type="radio" name="meanFilter" value="7"> Alpha-trimmed mean<br>
+					<button  class="pb_histogram applyResize" onclick="meanFilters()">Apply</button>
+				</div>
 			</div>
 			<div class="resize-container hidden">
 				<div class="filter-option convolution-filter-option" div>
@@ -89,6 +114,10 @@
 				<button  class="pb_histogram" onclick="rgbHistogram()">Histogram for RGB image</button>
 				<button  class="pb_histogram" onclick="globalHistogramEq()">Global histogram equalization</button>
 				<button  class="pb_histogram" onclick="localHistogramEq()">Local histogram equalization</button>
+			</div>
+			<div class= "adaptative-container hidden">
+				<button  class="pb_histogram" onclick="adaptativeNoiseReduction()">Noise Reduction</button>
+				<button  class="pb_histogram" onclick="medianFilterAdaptative()">Median</button>
 			</div>
 			<div class= "enhancing-container hidden">
 				<button  class="pb_histogram" onclick="laplacian()">Laplacian</button>

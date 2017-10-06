@@ -9,6 +9,8 @@ var showConvolution = function(){
 	Object.assign(document.querySelector('.convolution-container').style,{display:"block"});
 	Object.assign(document.querySelector(".resize-container").style,{display:"none"});
 	Object.assign(document.querySelector(".frequency-container").style,{display:"none"})
+	Object.assign(document.querySelector(".adaptative-container").style,{display:"none"})
+
 
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')
@@ -34,6 +36,8 @@ var showResize = function(){
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
 	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
 	Object.assign(document.querySelector(".frequency-container").style,{display:"none"})
+	Object.assign(document.querySelector(".adaptative-container").style,{display:"none"})
+
 
 
 	if (!imageContainer.classList.contains('hidden')){
@@ -56,6 +60,8 @@ var showEnhancing = function () {
 	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
 	Object.assign(document.querySelector(".resize-container").style,{display:"none"});
 	Object.assign(document.querySelector(".frequency-container").style,{display:"none"})
+	Object.assign(document.querySelector(".adaptative-container").style,{display:"none"})
+
 	if (!imageContainer.classList.contains('hidden')){
 		imageContainer.classList.add('hidden')
 	} 
@@ -260,13 +266,15 @@ var computePosition = function(i,j,w,h,kerneloffset){
 
 var computeResizeKernel = function(row,col,size, w,h) {
 	fKernel = []
-	for (var k = 0; k < size; k++)
-		for (var l = 0; l < size; l++) {
-			var index = ((w * (row+k)) + (col+l)) * 4;
-			if ((row < h)&&(col < w)) {
-				fKernel.push(index)
+	for (var k = -Math.floor(size/2); k < Math.floor(size/2); k++)
+		if (((row+k) >= 0)&&((row+k) < h)) 
+			for (var l = 0; l < size; l++) {
+				if (((col+l) >=0)&&((col+l) < w)) {
+					var index = ((w * (row+k)) + (col+l)) * 4;
+					fKernel.push(index)
+				}
 			}
-		}
+
 	return fKernel
 
 }
