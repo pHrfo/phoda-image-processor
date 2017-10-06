@@ -7,6 +7,7 @@ var showAdaptative = function() {
 	Object.assign(document.querySelector('.histogram-container').style,{display:"none"});
 	Object.assign(document.querySelector('.convolution-container').style,{display:"none"});
 	Object.assign(document.querySelector(".frequency-container").style,{display:"none"})
+	Object.assign(document.querySelector(".resize-container").style,{display:"none"})
 
 
 	if (!imageContainer.classList.contains('hidden')){
@@ -28,7 +29,6 @@ var adaptativeNoiseReduction = function() {
 
 	var size = 7
 
-	var kernelSizes = {}
 	for (var y = 0; y < canv.height; y++) {
 		for (var x = 0; x < canv.width; x++) {
 		
@@ -38,9 +38,6 @@ var adaptativeNoiseReduction = function() {
 
 			var mean = computeMean(img, fKernel)
 			var vari = computeVariance(img, fKernel, mean)
-
-			if((y==0)&&(x<3))
-				console.log(mean, vari)
 
 			n_img.data[index] = fHat(img.data[index], mean.r, vari.r, noiseVar)
 			n_img.data[index + 1] = fHat(img.data[index + 1], mean.g, vari.g, noiseVar)
@@ -76,5 +73,69 @@ var computeVariance = function(img, pixels, mean) {
 	}
 
 	return vari
+}
 
+var medianFilterAdaptative = function(){
+	var kerneloffset = Math.floor(document.getElementById('convksize').value / 2);
+	var img = genericFilter();
+	var n_img = genericFilter();
+	var canv = document.querySelector(".canvas");
+	var w = img.width
+	var h = img.height
+	var kernelSizes = {}
+
+
+	for (var i = 0; i< h; i++){
+		for (var j = 0; j < w; j++){
+			var size = 3
+			while(true) {
+				var fKernel = computeResizeKernel(i,j,size,canv.width,canv.height);
+				
+				var median = computeMedianAdaptative(img,fKernel)
+				if (median == null) {
+					size += 1
+					continue;
+				}
+
+				if ((i==0)&&(j<3))
+					console.log(median)
+
+				var kCenter = (i * w + j) * 4
+
+				if (kernelSizes[size] == undefined)
+					kernelSizes[size] = 0
+
+				kernelSizes[size] += 1
+
+				n_img.data[kCenter] = median[0]
+				n_img.data[kCenter + 1] = median[1]
+				n_img.data[kCenter + 2] = median[2]
+				break;
+			}
+		}
+	}
+	console.log(kernelSizes)
+	document.querySelector(".canvas").getContext("2d").putImageData(img, 0, 0)
+}
+
+var computeMedianAdaptative = function(img,fKernel){
+	var values = {r:[], g:[], b:[]}
+	for(var i = 0; i < fKernel.length; i++){
+		values.r.push(img.data[fKernel[i]])
+		values.g.push(img.data[fKernel[i] + 1])
+		values.b.push(img.data[fKernel[i] + 2])
+	}
+
+	values.r = values.r.sort((a, b) => a - b);
+	values.g = values.g.sort((a, b) => a - b);
+	values.b = values.b.sort((a, b) => a - b);
+
+	var mr = values.r[(values.r.length - 1 )/2]
+	var mg = values.g[(values.g.length - 1 )/2]
+	var mb = values.b[(values.b.length - 1 )/2]
+
+	if ((mr == values.r[0])||(mr == values.r[0])||(mr == values.r[0]))
+		return null
+
+	return [mr, mg, mb]
 }

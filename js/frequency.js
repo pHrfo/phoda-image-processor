@@ -4,6 +4,8 @@ var showFFilters = function(){
 	Object.assign(document.querySelector('.enhancing-container').style,{display:"none"});
 	Object.assign(document.querySelector(".resize-container").style,{display:"none"});
 	Object.assign(document.querySelector(".frequency-container").style,{display:"block"})
+	Object.assign(document.querySelector(".adaptative-container").style,{display:"none"})
+
 	
 
 	var freq = document.querySelector('.frequency-container')
