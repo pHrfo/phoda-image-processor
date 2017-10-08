@@ -117,16 +117,16 @@ var bandpass = function() {
 var arithmeticMean = function(img,kerneloffset,m,n){
 	var w = img.width
 	var h = img.height
-
+	var cop = img.data.slice();
 	for (var i = 0; i< h; i++){
 		for (var j = 0; j < w; j++){
 			var means = {r:0, g:0, b:0}
 			var fKernel = computePosition(i, j, w, h, kerneloffset);
 			
 			for(var k = 0; k < fKernel.length; k++){
-				means.r += img.data[fKernel[k]]
-				means.g += img.data[fKernel[k] + 1]
-				means.b += img.data[fKernel[k] + 2]
+				means.r += cop[fKernel[k]]
+				means.g += cop[fKernel[k] + 1]
+				means.b += cop[fKernel[k] + 2]
 			}
 			var kCenter = (i * w + j) * 4
 
@@ -142,16 +142,16 @@ var arithmeticMean = function(img,kerneloffset,m,n){
 var harmonicMean = function(img,kerneloffset,m,n){
 	var w = img.width
 	var h = img.height
-
+	var cop = img.data.slice();
 	for (var i = 0; i< h; i++){
 		for (var j = 0; j < w; j++){
 			var means = {r:0, g:0, b:0}
 			var fKernel = computePosition(i, j, w, h, kerneloffset);
 			
-			for(var k = 0; k < fKernel.length; k++){
-				means.r += 1/img.data[fKernel[k]]
-				means.g += 1/img.data[fKernel[k] + 1]
-				means.b += 1/img.data[fKernel[k] + 2]
+			for(var k in fKernel){
+				means.r += 1/cop[fKernel[k]]
+				means.g += 1/cop[fKernel[k] + 1]
+				means.b += 1/cop[fKernel[k] + 2]
 			}
 			var kCenter = (i * w + j) * 4
 
@@ -164,17 +164,18 @@ var harmonicMean = function(img,kerneloffset,m,n){
 }
 
 var geometricMean = function(img,kerneloffset,m,n){
-	var w = img.width
-	var h = img.height
+	var w = img.width;
+	var h = img.height;
+	var cop = img.data.slice();
 	for (var i = 0; i< h; i++){
 		for (var j = 0; j < w; j++){
 			var means = {r:1, g:1, b:1}
 			var fKernel = computePosition(i, j, w, h, kerneloffset);
 			
-			for(var k = 0; k < fKernel.length; k++){
-				means.r *= img.data[fKernel[k]]
-				means.g *= img.data[fKernel[k] + 1]
-				means.b *= img.data[fKernel[k] + 2]
+			for(var k in fKernel){
+				means.r *= cop[fKernel[k]]
+				means.g *= cop[fKernel[k] + 1]
+				means.b *= cop[fKernel[k] + 2]
 			}
 			var kCenter = (i * w + j) * 4
 			img.data[kCenter] = Math.pow(means.r,1/(m*n));
@@ -188,23 +189,24 @@ var geometricMean = function(img,kerneloffset,m,n){
 var charmonicMean = function(img,kerneloffset,q){
 	var w = img.width
 	var h = img.height
+	var cop = img.data.slice();
 	for (var i = 0; i< h; i++){
 		for (var j = 0; j < w; j++){
 			var means_q =  {r:0, g:0, b:0}
 			var means_q1 =  {r:0, g:0, b:0}
 			var fKernel = computePosition(i, j, w, h, kerneloffset);
-			var kCenter = (i * w + j) * 4
+			
 
 			for(var k = 0; k < fKernel.length; k++){
-				means_q.r += Math.pow(img.data[fKernel[k]],q)
-				means_q.g += Math.pow(img.data[fKernel[k] + 1],q)
-				means_q.b += Math.pow(img.data[fKernel[k] + 2],q)
+				means_q.r += Math.pow(cop[fKernel[k]],q)
+				means_q.g += Math.pow(cop[fKernel[k] + 1],q)
+				means_q.b += Math.pow(cop[fKernel[k] + 2],q)
 
-				means_q1.r += Math.pow(img.data[fKernel[k]],q+1)
-				means_q1.g += Math.pow(img.data[fKernel[k] + 1],q+1)
-				means_q1.b += Math.pow(img.data[fKernel[k] + 2],q+1)
+				means_q1.r += Math.pow(cop[fKernel[k]],q+1)
+				means_q1.g += Math.pow(cop[fKernel[k] + 1],q+1)
+				means_q1.b += Math.pow(cop[fKernel[k] + 2],q+1)
 			}
-
+			var kCenter = (i * w + j) * 4
 			img.data[kCenter] = means_q1.r / means_q.r
 			img.data[kCenter + 1] = means_q1.g / means_q.g
 			img.data[kCenter + 2] = means_q1.b / means_q.b
@@ -216,20 +218,21 @@ var charmonicMean = function(img,kerneloffset,q){
 var Max = function(img,kerneloffset,m,n){
 	var w = img.width
 	var h = img.height
+	var cop = img.data.slice();
 	for (var i = 0; i< h; i++){
 		for (var j = 0; j < w; j++){
 			var means = {r:0, g:0, b:0}
 			var fKernel = computePosition(i, j, w, h, kerneloffset);
 			
 			for(var k = 0; k < fKernel.length; k++){
-				if(means.r < img.data[fKernel[k]])
-					means.r = img.data[fKernel[k]]
+				if(means.r < cop[fKernel[k]])
+					means.r = cop[fKernel[k]]
 				
-				if(means.g < img.data[fKernel[k] + 1])
-					means.g = img.data[fKernel[k] + 1]
+				if(means.g < cop[fKernel[k] + 1])
+					means.g = cop[fKernel[k] + 1]
 				
-				if(means.b < img.data[fKernel[k] + 2])
-					means.b = img.data[fKernel[k] + 2]
+				if(means.b < cop[fKernel[k] + 2])
+					means.b = cop[fKernel[k] + 2]
 
 			}
 
@@ -247,21 +250,21 @@ var Max = function(img,kerneloffset,m,n){
 var Min = function(img,kerneloffset,m,n){
 	var w = img.width
 	var h = img.height
-
+	var cop = img.data.slice();
 	for (var i = 0; i< h; i++){
 		for (var j = 0; j < w; j++){
 			var means = {r:255, g:255, b:255}
 			var fKernel = computePosition(i, j, w, h, kerneloffset);
 			
 			for(var k = 0; k < fKernel.length; k++){
-				if(means.r > img.data[fKernel[k]])
-					means.r = img.data[fKernel[k]]
+				if(means.r > cop[fKernel[k]])
+					means.r = cop[fKernel[k]]
 				
-				if(means.g > img.data[fKernel[k] + 1])
-					means.g = img.data[fKernel[k] + 1]
+				if(means.g > cop[fKernel[k] + 1])
+					means.g = cop[fKernel[k] + 1]
 				
-				if(means.b > img.data[fKernel[k] + 2])
-					means.b = img.data[fKernel[k] + 2]
+				if(means.b > cop[fKernel[k] + 2])
+					means.b = cop[fKernel[k] + 2]
 
 			}
 			
@@ -279,7 +282,7 @@ var Min = function(img,kerneloffset,m,n){
 var midPoint = function(img,kerneloffset,m,n){
 	var w = img.width
 	var h = img.height
-
+	var cop = img.data.slice();
 	for (var i = 0; i< h; i++){
 		for (var j = 0; j < w; j++){
 			var min = {r:255, g:255, b:255};
@@ -288,31 +291,32 @@ var midPoint = function(img,kerneloffset,m,n){
 			var fKernel = computePosition(i, j, w, h, kerneloffset);
 			
 			for(var k = 0; k < fKernel.length; k++){
-				if(mkn.r > img.data[fKernel[k]])
-					mkn.r = img.data[fKernel[k]]
+				if(min.r > cop[fKernel[k]])
+					min.r = cop[fKernel[k]]
 				
-				if(mkn.g > img.data[fKernel[k] + 1])
-					mkn.g = img.data[fKernel[k] + 1]
+				if(min.g > cop[fKernel[k] + 1])
+					min.g = cop[fKernel[k] + 1]
 				
-				if(mkn.b > img.data[fKernel[k] + 2])
-					mkn.b = img.data[fKernel[k] + 2]
+				if(min.b > cop[fKernel[k] + 2])
+					min.b = cop[fKernel[k] + 2]
 
-				if(max.r < img.data[fKernel[k]])
-					max.r = img.data[fKernel[k]]
+				if(max.r < cop[fKernel[k]])
+					max.r = cop[fKernel[k]]
 				
-				if(max.g < img.data[fKernel[k] + 1])
-					max.g = img.data[fKernel[k] + 1]
+				if(max.g < cop[fKernel[k] + 1])
+					max.g = cop[fKernel[k] + 1]
 				
-				if(max.b < img.data[fKernel[k] + 2])
-					max.b = img.data[fKernel[k] + 2]
+				if(max.b < cop[fKernel[k] + 2])
+					max.b = cop[fKernel[k] + 2]
 
 			}
 			
 			var kCenter = (i * w + j) * 4
-
-			img.data[kCenter] = (1/2)*(min.r + max.r);
-			img.data[kCenter + 1] = (1/2)*(min.g + max.g);
-			img.data[kCenter + 2] = (1/2)*(min.b + min.b);
+			min = (min.r + min.g + min.b)/3
+			max = (max.r + max.g + max.b)/3
+			img.data[kCenter] = (1/2)*(min + max);
+			img.data[kCenter + 1] = (1/2)*(min + max);
+			img.data[kCenter + 2] = (1/2)*(min + max);
 		}
 	}
 
@@ -322,22 +326,29 @@ var midPoint = function(img,kerneloffset,m,n){
 var alphaTrimmedMean = function(img,kerneloffset,m,n,d){
 	var w = img.width
 	var h = img.height
-
+	var cop = img.data.slice();
+	var sp =Math.floor(d/2);
 	for (var i = 0; i< h; i++){
 		for (var j = 0; j < w; j++){
-			var means = {r:0, g:0, b:0}
+			var means_r = [];
+			var means_g = [];
+			var means_b = []
 			var fKernel = computePosition(i, j, w, h, kerneloffset);
 
 			for(var k = 0; k < fKernel.length; k++){
-				means.r += img.data[fKernel[k]]
-				means.g += img.data[fKernel[k] + 1]
-				means.b += img.data[fKernel[k] + 2]
+				means_r.push(cop[fKernel[k]])
+				means_g.push(cop[fKernel[k] + 1])
+				means_b.push(cop[fKernel[k] + 2])
 			}
+			means_r = means_r.sort((a, b) => a - b).slice(sp, means_r.length-sp);
+			means_g = means_g.sort((a, b) => a - b).slice(sp, means_g.length-sp);
+			means_b = means_b.sort((a, b) => a - b).slice(sp, means_b.length-sp);
+
 			var kCenter = (i * w + j) * 4
 
-			img.data[kCenter] = means.r/((m*n)-d);
-			img.data[kCenter + 1] = means.g/((m*n)-d);
-			img.data[kCenter + 2] = means.b/((m*n)-d);
+			img.data[kCenter] = means_r.reduce((a, b) => a + b, 0)/((m*n)-d);
+			img.data[kCenter + 1] = means_g.reduce((a, b) => a + b, 0)/((m*n)-d);
+			img.data[kCenter + 2] = means_b.reduce((a, b) => a + b, 0)/((m*n)-d);
 		}
 	}
 
