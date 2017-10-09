@@ -360,7 +360,7 @@ var alphaTrimmedMean = function(img,kerneloffset,m,n,d){
 var meanFilters = function(){
 	var radios = document.getElementsByName("meanFilter");
 	var meanop = undefined;
-	var w = document.getElementById("w_value").value;
+	var w = +document.getElementById("w_value").value;
 
 	var kerneloffset = Math.floor(w/2);
 	var img = genericFilter();
@@ -382,7 +382,7 @@ var meanFilters = function(){
 	       	img = geometricMean(img,kerneloffset,w,w);
 	        break;
 	    case 3:
-	    	var q = document.getElementById("q_value").value;
+	    	var q = parseInt(document.getElementById("q_value").value);
 	       	img = charmonicMean(img,kerneloffset,q);
 	        break;
 	    case 4:
@@ -395,7 +395,7 @@ var meanFilters = function(){
 	       	img = midPoint(img,kerneloffset,w,w);
 	        break;
 	    case 7:
-	    	var d = document.getElementById("d_value").value;
+	    	var d = parseInt(document.getElementById("d_value").value);
 	       	img = alphaTrimmedMean(img,kerneloffset,w,w,d);
 	        break;
 	    default:
