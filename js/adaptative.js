@@ -78,7 +78,7 @@ var computeVariance = function(img, pixels, mean) {
 var medianFilterAdaptative = function(){
 	var kerneloffset = Math.floor(document.getElementById('convksize').value / 2);
 	var n_img = genericFilter();
-	var img = genericFilter(true);
+	var img = genericFilter();
 	var canv = document.querySelector(".canvas");
 	var w = img.width
 	var h = img.height
@@ -89,7 +89,7 @@ var medianFilterAdaptative = function(){
 		for (var j = 0; j < w; j++){
 			var size = 3
 			while(true) {
-				var fKernel = computeAdaptativeKernel(i,j,size,canv.width,canv.height);
+				var fKernel = computeAdaptativeKernel(i,j,size,img.width,img.height);
 				
 				var median = computeMedianAdaptative(img,fKernel)
 				if (median == null) {
@@ -118,9 +118,9 @@ var medianFilterAdaptative = function(){
 
 var computeAdaptativeKernel = function(row,col,size, w,h) {
 	fKernel = []
-	for (var k = -Math.floor(size/2); k < Math.floor(size/2); k++)
+	for (var k = -Math.floor(size/2); k <= Math.floor(size/2); k++)
 		if (((row+k) >= 0)&&((row+k) < h)) 
-			for (var l = 0; l < size; l++) {
+			for (var l = -Math.floor(size/2); l <= Math.floor(size/2); l++) {
 				if (((col+l) >=0)&&((col+l) < w)) {
 					var index = ((w * (row+k)) + (col+l)) * 4;
 					fKernel.push(index)
@@ -143,13 +143,13 @@ var computeMedianAdaptative = function(img,fKernel){
 	values.g = values.g.sort((a, b) => a - b);
 	values.b = values.b.sort((a, b) => a - b);
 
-	var mr = values.r[(values.r.length - 1 )/2]
-	var mg = values.g[(values.g.length - 1 )/2]
-	var mb = values.b[(values.b.length - 1 )/2]
+	var mr = values.r[parseInt((values.r.length - 1 )/2)]
+	var mg = values.g[parseInt((values.g.length - 1 )/2)]
+	var mb = values.b[parseInt((values.b.length - 1 )/2)]
 
-	if ((mr == values.r[0])&&(mg == values.g[0])&&(mb == values.b[0])&&
-		(mr == values.r[fKernel.length - 1])&&(mg == values.g[fKernel.length - 1])&&(mb == values.b[fKernel.length - 1]))
-		return null
+	//if ((mr == values.r[0])&&(mg == values.g[0])&&(mb == values.b[0])&&
+	//	(mr == values.r[fKernel.length - 1])&&(mg == values.g[fKernel.length - 1])&&(mb == values.b[fKernel.length - 1]))
+//		return null
 
 	return [mr, mg, mb]
 }
