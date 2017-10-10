@@ -266,9 +266,9 @@ var computePosition = function(i,j,w,h,kerneloffset){
 
 var computeResizeKernel = function(row,col,size, w,h) {
 	fKernel = []
-	for (var k = -Math.floor(size/2); k < Math.floor(size/2); k++)
+	for (var k = -Math.floor(size/2); k <= Math.floor(size/2); k++)
 		if (((row+k) >= 0)&&((row+k) < h)) 
-			for (var l = 0; l < size; l++) {
+			for (var l = -Math.floor(size/2); l <= Math.floor(size/2); l++) {
 				if (((col+l) >=0)&&((col+l) < w)) {
 					var index = ((w * (row+k)) + (col+l)) * 4;
 					fKernel.push(index)
@@ -291,22 +291,22 @@ var computeMedian = function(img,fKernel){
 	values.g = values.g.sort((a, b) => a - b);
 	values.b = values.b.sort((a, b) => a - b);
 
-	var mr = values.r[(values.r.length - 1 )/2]
-	var mg = values.g[(values.g.length - 1 )/2]
-	var mb = values.b[(values.b.length - 1 )/2]
+	var mr = values.r[parseInt((values.r.length - 1 )/2)]
+	var mg = values.g[parseInt((values.g.length - 1 )/2)]
+	var mb = values.b[parseInt((values.b.length - 1 )/2)]
 
 	return [mr, mg, mb]
 }
 
 var medianFilter = function(){
-	var kerneloffset = Math.floor(document.getElementById('convksize').value / 2);
+	var kerneloffset = Math.floor(document.getElementById('convksize').value);
 	var img = genericFilter();
 	var w = img.width
 	var h = img.height
 
 	for (var i = 0; i< h; i++){
 		for (var j = 0; j < w; j++){
-			var fKernel = computePosition(i, j, w, h, kerneloffset);
+			var fKernel = computeAdaptativeKernel(i,j,kerneloffset,img.width,img.height);
 			
 			var median = computeMedian(img,fKernel)
 			var kCenter = (i * w + j) * 4
