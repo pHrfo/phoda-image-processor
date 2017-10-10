@@ -147,9 +147,9 @@ var computeMedianAdaptative = function(img,fKernel){
 	var mg = values.g[parseInt((values.g.length - 1 )/2)]
 	var mb = values.b[parseInt((values.b.length - 1 )/2)]
 
-	//if ((mr == values.r[0])&&(mg == values.g[0])&&(mb == values.b[0])&&
-	//	(mr == values.r[fKernel.length - 1])&&(mg == values.g[fKernel.length - 1])&&(mb == values.b[fKernel.length - 1]))
-//		return null
+	if ((mr == values.r[0])&&(mg == values.g[0])&&(mb == values.b[0])&&
+		(mr == values.r[fKernel.length - 1])&&(mg == values.g[fKernel.length - 1])&&(mb == values.b[fKernel.length - 1]))
+		return null
 
 	return [mr, mg, mb]
 }
