@@ -77,8 +77,8 @@ var computeVariance = function(img, pixels, mean) {
 
 var medianFilterAdaptative = function(){
 	var kerneloffset = Math.floor(document.getElementById('convksize').value / 2);
-	var img = genericFilter();
 	var n_img = genericFilter();
+	var img = genericFilter(true);
 	var canv = document.querySelector(".canvas");
 	var w = img.width
 	var h = img.height
@@ -89,16 +89,13 @@ var medianFilterAdaptative = function(){
 		for (var j = 0; j < w; j++){
 			var size = 3
 			while(true) {
-				var fKernel = computeResizeKernel(i,j,size,canv.width,canv.height);
+				var fKernel = computeAdaptativeKernel(i,j,size,canv.width,canv.height);
 				
 				var median = computeMedianAdaptative(img,fKernel)
 				if (median == null) {
-					size += 1
+					size += 2
 					continue;
 				}
-
-				if ((i==0)&&(j<3))
-					console.log(median)
 
 				var kCenter = (i * w + j) * 4
 
@@ -115,7 +112,23 @@ var medianFilterAdaptative = function(){
 		}
 	}
 	console.log(kernelSizes)
-	document.querySelector(".canvas").getContext("2d").putImageData(img, 0, 0)
+	console.log("AQUI")
+	document.querySelector(".canvas").getContext("2d").putImageData(n_img, 0, 0)
+}
+
+var computeAdaptativeKernel = function(row,col,size, w,h) {
+	fKernel = []
+	for (var k = -Math.floor(size/2); k < Math.floor(size/2); k++)
+		if (((row+k) >= 0)&&((row+k) < h)) 
+			for (var l = 0; l < size; l++) {
+				if (((col+l) >=0)&&((col+l) < w)) {
+					var index = ((w * (row+k)) + (col+l)) * 4;
+					fKernel.push(index)
+				}
+			}
+
+	return fKernel
+
 }
 
 var computeMedianAdaptative = function(img,fKernel){
@@ -134,7 +147,8 @@ var computeMedianAdaptative = function(img,fKernel){
 	var mg = values.g[(values.g.length - 1 )/2]
 	var mb = values.b[(values.b.length - 1 )/2]
 
-	if ((mr == values.r[0])||(mr == values.r[0])||(mr == values.r[0]))
+	if ((mr == values.r[0])&&(mg == values.g[0])&&(mb == values.b[0])&&
+		(mr == values.r[fKernel.length - 1])&&(mg == values.g[fKernel.length - 1])&&(mb == values.b[fKernel.length - 1]))
 		return null
 
 	return [mr, mg, mb]
