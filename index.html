@@ -11,6 +11,7 @@
 		<script type="text/javascript" src="js/histogram.js"></script>
 		<script type="text/javascript" src="js/frequency.js"></script>
 		<script type="text/javascript" src="js/adaptative.js"></script>
+		<script type="text/javascript" src="js/color_models.js"></script>
 	</head>
 	<body>
 		<header class="header-container">
@@ -24,6 +25,7 @@
 			<button class="header-button" onclick="showResize()">Resize</button>
 			<button class="header-button" onclick="showFFilters()">Frequency Filters</button>
 			<button class="header-button" onclick="showAdaptative()">Adaptative Filters</button>
+			<button class="header-button" onclick="showColorModels()">Color models</button>
 			<button class="header-button" onclick="reset()">Reset</button>
 		</div>
 		<div class="input-container container" >
@@ -64,6 +66,41 @@
 					</div>
 				</div>
 				
+			</div>
+			<div class="color-model-container hidden">
+				<div class="filter-option gamma-filter-option">
+					<div class="models">
+						<div class="models-input-container">
+							<div class="models-container">
+								<h4 class="models-input-header">RGB</h4>
+								<input class = "models-input r" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input g" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input b" type="number" oninput="" value="0" min="0" max="255" />
+								<div class="button-models">
+									<button class= "models-ok rgb" onclick="fromRGB()">ok</button>
+								</div>
+							</div>
+							<div class="models-container">
+								<h4 class="models-input-header">CMY</h4>
+								<input class = "models-input c" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input m" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input y" type="number" oninput="" value="0" min="0" max="255" />
+								<div class="button-models">
+									<button class= "models-ok cmy" onclick="fromCMY()">ok</button>
+								</div>
+							</div>
+							<div class="models-container">
+								<h4 class="models-input-header">HSI</h4>
+								<input class = "models-input h" type="number" oninput="" value="0" min="0" max="360" />
+								<input class = "models-input s" type="number" oninput="" value="0" min="0" max="1" />
+								<input class = "models-input i" type="number" oninput="" value="0" min="0" max="255" />
+								<div class="button-models">
+									<button class= "models-ok cmy" onclick="fromHSI()">ok</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="frequency-container hidden">
 				<button  class="pb_histogram" onclick="lowpass()">Low-pass</button>
