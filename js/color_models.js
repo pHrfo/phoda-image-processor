@@ -1,3 +1,8 @@
+window.satu = 100;
+window.inten = 50;
+window.hue = 0;
+
+
 var showColorModels = function() {
 	var cmodels = document.querySelector('.color-model-container')
 	var imageContainer = document.querySelector('.filter-container')
@@ -24,6 +29,7 @@ var showColorModels = function() {
 	if(cmodels.classList.contains('hidden')){
 		cmodels.classList.remove('hidden')
 	}
+	initialize();
 
 }
 
@@ -147,4 +153,104 @@ var fromHSI = function() {
 		ctx.data[i+2] = b
 	}
 	document.querySelector(".canvas").getContext("2d").putImageData(ctx, 0, 0)
+}
+
+
+var changeSaturation = function(sat){
+	//change value in input box
+	let saturation = document.querySelector('.saturation').children;
+	for(let i = 0; i < 100; i++){
+		saturation[i].style.background = "hsl("+window.hue+","+i+"%,50%)";
+	}
+}
+
+var changeIntensity = function(inte){
+	//change value in input box
+	let inten = document.querySelector('.intensity').children;
+	for(let i = 0; i < 100; i++){
+		inten[i].style.background = "hsl("+window.hue+",100%,"+i+"%)";
+	}
+}
+
+var clickHue = function(value){
+	//change value in input box
+	window.hue = value;
+	document.querySelector(".h").value=value
+	changeSaturation(window.satu);
+	changeIntensity(window.inten);
+	
+}
+
+var clickSaturation = function(value) {
+	document.querySelector(".s").value=value
+	window.satu = value;
+}
+
+var clickIntensity = function(value) {
+	document.querySelector(".i").value=value
+	window.inten = value;
+
+}
+
+var makehue = function(){
+	let hue = document.querySelector('.hue');
+	//let row = hue.insertRow(0);
+	for(let i = 0; i < 360; i++){
+		//let cell = row.insertCell(i);
+		let cell = document.createElement("div")
+		cell.style.background = "hsl("+i+",100%,50%)";
+		// let w = document.querySelector(".tableslider").style.width/360
+		// console.log(w)
+		// cell.style.width = w+"px"
+		cell.setAttribute('onmousemove','clickHue('+i+')');
+		cell.setAttribute("onmouseout",'clickHue('+i+')');
+		cell.setAttribute('onmouseover','attBallon(event)');
+
+		hue.append(cell)
+	}
+}
+
+var makeSaturarion = function(){
+	let saturation = document.querySelector('.saturation');
+	//let row = saturation.insertRow(0);
+
+	for(let i = 0; i < 100; i++){
+		let cell = document.createElement("div")
+		//let cell = row.insertCell(i);
+		cell.style.background = "hsl(0,"+i+"%,50%)";
+
+		cell.setAttribute('onmousemove','clickSaturation('+i+')');
+		cell.setAttribute("onmouseout",'clickSaturation('+i+')');
+
+		saturation.append(cell)
+	}
+}
+
+var attBallon = function(event){				
+	event.target.classList.add('target')
+}
+
+var makeIntentisy = function(){
+	let intensity = document.querySelector('.intensity');
+	// let row = intensity.insertRow(0);
+
+	for(let i = 0; i < 100; i++){
+		let cell = document.createElement("div")
+		//let cell = row.insertCell(i);
+		cell.style.background = "hsl(0,100%,"+i+"%)";
+
+		cell.setAttribute('onmousemove','clickIntensity('+i+')');
+		cell.setAttribute("onmouseout",'clickIntensity('+i+')');
+
+		intensity.append(cell)
+	}
+}
+
+
+var initialize = function(){
+	makehue();
+	makeSaturarion();
+	makeIntentisy();
+
+	clickHue(0);
 }
