@@ -47,7 +47,7 @@ var fromRGB = function() {
 	var denominator = Math.sqrt((Math.pow(r-g,2) + (r-b)*(g-b)))
 	var theta = Math.acos(numerator/denominator)
 
-	console.log(theta)
+	console.log(theta > 1000)
 
 	document.querySelector('.models-input.h').value = (b <= g ? theta : 360 - theta)
 	document.querySelector('.models-input.s').value = 1 - 3*Math.min(r,g,b)/(r+g+b)
@@ -182,12 +182,12 @@ var clickHue = function(value){
 }
 
 var clickSaturation = function(value) {
-	document.querySelector(".s").value=value
+	document.querySelector(".s").value=value/100
 	window.satu = value;
 }
 
 var clickIntensity = function(value) {
-	document.querySelector(".i").value=value
+	document.querySelector(".i").value=value*255/100
 	window.inten = value;
 
 }
