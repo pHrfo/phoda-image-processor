@@ -4,7 +4,6 @@
 		<title>PHoDa</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="css/index.css">
-		<!-- <script type="text/javascript" src="js/FileSaver.min.js"></script> -->
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script type="text/javascript" src="js/basic_filters.js"></script>
 		<script type="text/javascript" src="js/convolution.js"></script>
@@ -12,6 +11,7 @@
 		<script type="text/javascript" src="js/frequency.js"></script>
 		<script type="text/javascript" src="js/adaptative.js"></script>
 		<script type="text/javascript" src="js/color_models.js"></script>
+		<script type="text/javascript" src="js/chroma_key.js"></script>
 	</head>
 	<body>
 		<header class="header-container">
@@ -26,6 +26,7 @@
 			<button class="header-button" onclick="showFFilters()">Frequency Filters</button>
 			<button class="header-button" onclick="showAdaptative()">Adaptative Filters</button>
 			<button class="header-button" onclick="showColorModels()">Color models</button>
+			<button class="header-button" onclick="showChromaKey()">Chroma Key</button>
 			<button class="header-button" onclick="reset()">Reset</button>
 		</div>
 		<div class="input-container container" >
@@ -66,6 +67,36 @@
 					</div>
 				</div>
 				
+			</div>
+			<div class="chroma-key-container hidden">
+				<div class="filter-option gamma-filter-option">
+					<div class="models">
+						<div class="models-input-container">
+							<div class="models-container">
+								<h4 class="models-input-header">Center</h4>
+								<input class = "models-input rc" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input gc" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input bc" type="number" oninput="" value="0" min="0" max="255" />
+							</div>
+							<div class="models-container">
+								<h4 class="models-input-header">Radius</h4>
+								<input class = "models-input radius" type="number" oninput="" value="0" min="0" max="255" />
+							</div>
+							<div class="models-container">
+								<h4 class="models-input-header">Transparency</h4>
+								<input class = "models-input trans" type="number" oninput="" value="0" min="0" max="255" />
+								</div>
+							</div>
+							<div class="models-container">
+								<h4 class="models-input-header">Background image</h4>
+								<input type='file' class="file-upload background" onchange="readBackImage(event, this)"/>
+							</div>
+							<div class="button-models">
+									<button class= "models-ok chroma-ok" onclick="applyChroma()">ok</button>
+								</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="color-model-container hidden">
 				<div class="filter-option gamma-filter-option">
