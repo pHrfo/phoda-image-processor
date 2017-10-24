@@ -12,6 +12,7 @@
 		<script type="text/javascript" src="js/adaptative.js"></script>
 		<script type="text/javascript" src="js/color_models.js"></script>
 		<script type="text/javascript" src="js/chroma_key.js"></script>
+		<script type="text/javascript" src="js/shine.js"></script>
 	</head>
 	<body>
 		<header class="header-container">
@@ -26,6 +27,7 @@
 			<button class="header-button" onclick="showFFilters()">Frequency Filters</button>
 			<button class="header-button" onclick="showAdaptative()">Adaptative Filters</button>
 			<button class="header-button" onclick="showColorModels()">Color models</button>
+			<button class="header-button" onclick="showShine()">Shine</button>
 			<button class="header-button" onclick="showChromaKey()">Chroma Key</button>
 			<button class="header-button" onclick="reset()">Reset</button>
 		</div>
@@ -189,6 +191,30 @@
 				<button  class="pb_histogram" onclick="globalHistogramEq()">Global B&W histogram equalization</button>
 				<button  class="pb_histogram" onclick="globalHistogramEqRGB()">Global RGB histogram equalization</button>
 				<button  class="pb_histogram" onclick="localHistogramEq()">Local B&W histogram equalization</button>
+			</div>
+			<div class="shine-container hidden">
+				<div class="filter-option gamma-filter-option">
+					<div class="models">
+						<div class="models-input-container">
+							<div class="models-container">
+								<h4 class="models-input-header">RGB</h4>
+								<input class = "models-input kr" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input kg" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input kb" type="number" oninput="" value="0" min="0" max="255" />
+								<div class="button-models">
+									<button class= "models-ok krgb" onclick="shineRGB()">ok</button>
+								</div>
+							</div>
+							<div class="models-container">
+								<h4 class="models-input-header">HSI</h4>
+								<input class = "models-input ki" type="number" oninput="" value="0" min="0" max="255" />
+								<div class="button-models">
+									<button class= "models-ok khsi" onclick="shineHSI()">ok</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class= "adaptative-container hidden">
 				<button  class="pb_histogram" onclick="adaptativeNoiseReduction()">Noise Reduction</button>

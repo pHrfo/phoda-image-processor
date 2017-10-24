@@ -16,6 +16,7 @@ var showColorModels = function() {
 	Object.assign(document.querySelector(".adaptative-container").style,{display:"none"})
 	Object.assign(document.querySelector('.color-model-container').style,{display:"block"})
 	Object.assign(document.querySelector('.chroma-key-container').style,{display:"none"})
+	Object.assign(document.querySelector('.shine-container').style,{display:"none"})
 
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')
@@ -29,15 +30,16 @@ var showColorModels = function() {
 	if(cmodels.classList.contains('hidden')){
 		cmodels.classList.remove('hidden')
 	}
+	
 	initialize();
 
 }
 
 
-var fromRGB = function() {
-	var r = document.querySelector('.models-input.r').value
-	var g = document.querySelector('.models-input.g').value
-	var b = document.querySelector('.models-input.b').value
+var fromRGB = function(input) {
+	var r = (input ? input[0] : document.querySelector('.models-input.r').value)
+	var g = (input ? input[1] : document.querySelector('.models-input.g').value)
+	var b = (input ? input[2] : document.querySelector('.models-input.b').value)
 
 	document.querySelector('.models-input.c').value = 255 - r
 	document.querySelector('.models-input.m').value = 255 - g
@@ -46,8 +48,6 @@ var fromRGB = function() {
 	var numerator = ((r-g) + (r-b))/2
 	var denominator = Math.sqrt((Math.pow(r-g,2) + (r-b)*(g-b)))
 	var theta = Math.acos(numerator/denominator)
-
-	console.log(theta > 1000)
 
 	document.querySelector('.models-input.h').value = (b <= g ? theta : 360 - theta)
 	document.querySelector('.models-input.s').value = 1 - 3*Math.min(r,g,b)/(r+g+b)
@@ -68,12 +68,19 @@ var fromRGB = function() {
 		ctx.data[i+2] = b
 	}
 	document.querySelector(".canvas").getContext("2d").putImageData(ctx, 0, 0)
+
+	if (input != undefined) {
+		return {
+			'cmy': [255-r, 255-g, 255-b],
+			'hsi': [(b <= g ? theta : 360 - theta), 1 - 3*Math.min(r,g,b)/(r+g+b), r/3 + g/3 + b/3]
+		}
+	}
 }
 
-var fromCMY = function() {
-	var r = 255 - document.querySelector('.models-input.c').value
-	var g = 255 - document.querySelector('.models-input.m').value
-	var b = 255 - document.querySelector('.models-input.y').value
+var fromCMY = function(input) {
+	var r = (input ? input[0] : 255 - document.querySelector('.models-input.c').value)
+	var g = (input ? input[1] : 255 - document.querySelector('.models-input.m').value)
+	var b = (input ? input[2] : 255 - document.querySelector('.models-input.y').value)
 
 	document.querySelector('.models-input.r').value = r
 	document.querySelector('.models-input.g').value = g
@@ -104,10 +111,10 @@ var fromCMY = function() {
 	document.querySelector(".canvas").getContext("2d").putImageData(ctx, 0, 0)
 }
 
-var fromHSI = function() {
-	var h = document.querySelector('.models-input.h').value
-	var s = document.querySelector('.models-input.s').value
-	var i = document.querySelector('.models-input.i').value
+var fromHSI = function(input) {
+	var h = (input ? input[0] : document.querySelector('.models-input.h').value)
+	var s = (input ? input[1] : document.querySelector('.models-input.s').value)
+	var i = (input ? input[2] : document.querySelector('.models-input.i').value)
 
 	var r,g,b
 	if (h < 120) {
@@ -128,7 +135,7 @@ var fromHSI = function() {
 		r = 3*i - (g+b)
 	}
 
-	console.log(r,g,b)
+	// console.log(r,g,b)
 
 	document.querySelector('.models-input.r').value = parseInt(r)
 	document.querySelector('.models-input.g').value = parseInt(g)
@@ -153,6 +160,11 @@ var fromHSI = function() {
 		ctx.data[i+2] = b
 	}
 	document.querySelector(".canvas").getContext("2d").putImageData(ctx, 0, 0)
+
+	if (input != undefined) {
+		return {'rgb': [parseInt(r), parseInt(g), parseInt(b)],
+				'cmy': [255-parseInt(r), 255-parseInt(g), 255-parseInt(b)]}
+	}
 }
 
 
