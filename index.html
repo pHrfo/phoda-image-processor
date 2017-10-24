@@ -4,13 +4,14 @@
 		<title>PHoDa</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="css/index.css">
-		<!-- <script type="text/javascript" src="js/FileSaver.min.js"></script> -->
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script type="text/javascript" src="js/basic_filters.js"></script>
 		<script type="text/javascript" src="js/convolution.js"></script>
 		<script type="text/javascript" src="js/histogram.js"></script>
 		<script type="text/javascript" src="js/frequency.js"></script>
 		<script type="text/javascript" src="js/adaptative.js"></script>
+		<script type="text/javascript" src="js/color_models.js"></script>
+		<script type="text/javascript" src="js/chroma_key.js"></script>
 	</head>
 	<body>
 		<header class="header-container">
@@ -24,6 +25,8 @@
 			<button class="header-button" onclick="showResize()">Resize</button>
 			<button class="header-button" onclick="showFFilters()">Frequency Filters</button>
 			<button class="header-button" onclick="showAdaptative()">Adaptative Filters</button>
+			<button class="header-button" onclick="showColorModels()">Color models</button>
+			<button class="header-button" onclick="showChromaKey()">Chroma Key</button>
 			<button class="header-button" onclick="reset()">Reset</button>
 		</div>
 		<div class="input-container container" >
@@ -64,6 +67,77 @@
 					</div>
 				</div>
 				
+			</div>
+			<div class="chroma-key-container hidden">
+				<div class="filter-option gamma-filter-option">
+					<div class="models">
+						<div class="models-input-container">
+							<div class="models-container">
+								<h4 class="models-input-header">Center</h4>
+								<input class = "models-input rc" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input gc" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input bc" type="number" oninput="" value="0" min="0" max="255" />
+							</div>
+							<div class="models-container">
+								<h4 class="models-input-header">Radius</h4>
+								<input class = "models-input radius" type="number" oninput="" value="0" min="0" max="255" />
+							</div>
+							<div class="models-container">
+								<h4 class="models-input-header">Transparency</h4>
+								<input class = "models-input trans" type="number" oninput="" value="1" min="0" max="1" step="0.01"/>
+								</div>
+							</div>
+							<div class="models-container">
+								<h4 class="models-input-header">Background image</h4>
+								<input type='file' class="file-upload background" onchange="readBackImage(event, this)"/>
+							</div>
+							<div class="button-models">
+									<button class= "models-ok chroma-ok" onclick="applyChroma()">ok</button>
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="color-model-container hidden">
+				<div class="filter-option gamma-filter-option">
+					<div class="models">
+						<div class="models-input-container">
+							<div class="models-container">
+								<h4 class="models-input-header">RGB</h4>
+								<input class = "models-input r" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input g" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input b" type="number" oninput="" value="0" min="0" max="255" />
+								<div class="button-models">
+									<button class= "models-ok rgb" onclick="fromRGB()">ok</button>
+								</div>
+							</div>
+							<div class="models-container">
+								<h4 class="models-input-header">CMY</h4>
+								<input class = "models-input c" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input m" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input y" type="number" oninput="" value="0" min="0" max="255" />
+								<div class="button-models">
+									<button class= "models-ok cmy" onclick="fromCMY()">ok</button>
+								</div>
+							</div>
+							<div class="models-container">
+								<h4 class="models-input-header">HSI</h4>
+								<input class = "models-input h" type="number" oninput="" value="0" min="0" max="360" />
+								<input class = "models-input s" type="number" oninput="" value="0" min="0" max="1" />
+								<input class = "models-input i" type="number" oninput="" value="125" min="0" max="255" />
+								<div class="button-models">
+									<button class= "models-ok cmy" onclick="fromHSI()">ok</button>
+								</div>
+							</div>
+							<!-- <div class="ballon"></div> -->
+							<div class="container">
+								<div class="tableslider hue"></div>
+								<div class="tableslider saturation"></div>
+								<div class="tableslider intensity"></div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="frequency-container hidden">
 				<button  class="pb_histogram" onclick="lowpass()">Low-pass</button>
@@ -112,8 +186,9 @@
 			<div class="histogram-container hidden">
 				<button  class="pb_histogram" onclick="greyHistogram()">Histogram for B&W image</button>
 				<button  class="pb_histogram" onclick="rgbHistogram()">Histogram for RGB image</button>
-				<button  class="pb_histogram" onclick="globalHistogramEq()">Global histogram equalization</button>
-				<button  class="pb_histogram" onclick="localHistogramEq()">Local histogram equalization</button>
+				<button  class="pb_histogram" onclick="globalHistogramEq()">Global B&W histogram equalization</button>
+				<button  class="pb_histogram" onclick="globalHistogramEqRGB()">Global RGB histogram equalization</button>
+				<button  class="pb_histogram" onclick="localHistogramEq()">Local B&W histogram equalization</button>
 			</div>
 			<div class= "adaptative-container hidden">
 				<button  class="pb_histogram" onclick="adaptativeNoiseReduction()">Noise Reduction</button>

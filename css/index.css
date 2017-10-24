@@ -104,8 +104,8 @@ body {
 	height: auto;
 	padding-right: 6px;
 	float: left;
-	max-width: 100%;
-	max-height: 100%;
+	max-width: 300px;
+	max-height: 187px;
 
 }
 
@@ -253,4 +253,95 @@ body {
 
 .adaptative-container {
 	padding-top: 10px;
+}
+
+.color-model-container {
+	padding-top: 10px;
+}
+
+.models {
+	display: inline-block;
+	padding-left: 12.5%;
+}
+
+.models-container {
+	width: 20%;
+	display: block;
+	padding-left: 50px;
+}
+
+.models-input-header {
+	display: inline-block;
+	width: 100%;
+    border-spacing: 10px;
+    border-collapse: separate;
+}
+
+.models-input-header td { 
+    padding-bottom: 5px;
+}
+
+.models-input-container {
+	display: inline-flex;
+	width: 100%;
+}
+
+.models-input {
+	width: 100%;
+}
+
+.button-models {
+	padding-top: 10px;
+}
+
+.models-ok {
+	background: #535353;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-radius: 50px;
+}
+
+.container{
+	width: auto;
+	height: auto;
+}
+
+.tableslider{
+	width: 360px;
+	height: auto;
+}
+
+.tableslider div{
+	float:left;
+	height: 22px;
+	width: 1px;
+}
+
+.tableslider:not(.hue) div{
+	width: 1%;
+	margin-top: 25px;
+}
+
+.ballon{
+	display: inline-block;
+	border-style: solid;
+	background-color: white;
+	color: black;
+	font-size: 10px;
+	width: 23px;
+	height: 20px;
+	border-width: 1px;
+	border-radius: 9px;
+}
+
+.ballon:before {
+	content: '';
+    position: relative;
+    border-style: solid;
+    border-width: 5px 5px 0;
+    border-color: #000000 transparent;
+    display: block;
+    width: 0;
+    z-index: 0;
+    bottom: -21px;
+    left: 6px;
 }
