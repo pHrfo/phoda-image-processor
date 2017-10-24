@@ -1,4 +1,4 @@
-window.backimg = undefined
+window.backimg = document.createElement('img')
 
 var showChromaKey = function(){
 	var ckey = document.querySelector('.chroma-key-container')
@@ -29,50 +29,58 @@ var showChromaKey = function(){
 }
 
 var readBackImage = function(event, element){
-	var file = event.target.files[0];
-	var reader = new FileReader();
+	var file = event.target.files[0]
+	var reader = new FileReader()
 
-	var image = document.createElement('img');
-	var canvas = document.createElement('canvas');
-	var ctx = canvas.getContext("2d");
-	
 	reader.onload = function(event) {
-		image.src = event.target.result;
-		
-		ctx.drawImage(image, 0, 0, image.width, image.height);
+		window.backimg.src = event.target.result
 	}
-	canvas.width = image.width;
-	canvas.height = image.height;
-	
-	reader.readAsDataURL(file);
-	
 
-	window.backimg = ctx.getImageData(0, 0, image.width, image.height);
+	reader.readAsDataURL(file)
+}
+
+var getSumFactor = function(ri, ai) {
+	return Math.pow(ri - ai,2) >= 0 ? Math.pow(ri - ai,2) : 0
 }
 
 var applyChroma = function(){
 	var img = genericFilter();
+
+	var canvas = document.createElement('canvas');
+	canvas.width = img.width
+	canvas.height = img.height
+	canvas.getContext('2d').drawImage(window.backimg, 0, 0, canvas.width, canvas.height)
+	var backimg = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height)
 	
 	var rc = parseInt(document.querySelector('.rc').value);
 	var gc = parseInt(document.querySelector('.gc').value);
 	var bc = parseInt(document.querySelector('.bc').value);
 	
 	var radius = parseInt(document.querySelector('.radius').value);
-	var transparency = parseInt(document.querySelector('.trans').value);
+	var transparency = +document.querySelector('.trans').value;
 
 	if(window.backimg)
 
 		for (var i = 0; i < img.data.length; i += 4) {
-			var si = Math.pow(rc - img.data[i],2) + 
-					Math.pow(gc - img.data[i+1],2) + 
-					Math.pow(bc - img.data[i+2],2)
+			var si = getSumFactor(img.data[i], rc)/3 + 
+				   getSumFactor(img.data[i+1], gc)/3 + 
+				   getSumFactor(img.data[i+2], bc)/3
+
+			//console.log(si, radius, img.data[i], backimg.data[i])
 
 			if (si <= Math.pow(radius,2)){
+				
 				// console.log(img.data[i],window.backimg[i])
-				img.data[i] = window.backimg[i];
-				img.data[i+1] = window.backimg[i+1];
-				img.data[i+2] = window.backimg[i+2];
+				img.data[i] = backimg.data[i];
+				img.data[i+1] = backimg.data[i+1];
+				img.data[i+2] = backimg.data[i+2];
 
+			}
+
+			else {
+				img.data[i] = transparency*img.data[i] + (1-transparency)*backimg.data[i];
+				img.data[i+1] = transparency*img.data[i+1] + (1-transparency)*backimg.data[i+1];
+				img.data[i+2] = transparency*img.data[i+2] + (1-transparency)*backimg.data[i+2];
 			}
 			
 		}

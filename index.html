@@ -84,7 +84,7 @@
 							</div>
 							<div class="models-container">
 								<h4 class="models-input-header">Transparency</h4>
-								<input class = "models-input trans" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input trans" type="number" oninput="" value="1" min="0" max="1" step="0.01"/>
 								</div>
 							</div>
 							<div class="models-container">
@@ -186,8 +186,9 @@
 			<div class="histogram-container hidden">
 				<button  class="pb_histogram" onclick="greyHistogram()">Histogram for B&W image</button>
 				<button  class="pb_histogram" onclick="rgbHistogram()">Histogram for RGB image</button>
-				<button  class="pb_histogram" onclick="globalHistogramEq()">Global histogram equalization</button>
-				<button  class="pb_histogram" onclick="localHistogramEq()">Local histogram equalization</button>
+				<button  class="pb_histogram" onclick="globalHistogramEq()">Global B&W histogram equalization</button>
+				<button  class="pb_histogram" onclick="globalHistogramEqRGB()">Global RGB histogram equalization</button>
+				<button  class="pb_histogram" onclick="localHistogramEq()">Local B&W histogram equalization</button>
 			</div>
 			<div class= "adaptative-container hidden">
 				<button  class="pb_histogram" onclick="adaptativeNoiseReduction()">Noise Reduction</button>
