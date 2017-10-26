@@ -13,6 +13,7 @@ var readImage = function(event, element) {
 	Object.assign(document.querySelector(".resize-container").style,{display:"none"});
 	Object.assign(document.querySelector(".frequency-container").style,{display:"none"})
 	Object.assign(document.querySelector(".adaptative-container").style,{display:"none"})
+	Object.assign(document.querySelector('.shine-container').style,{display:"none"})
 
 	var file = event.target.files[0]
 	var reader = new FileReader()

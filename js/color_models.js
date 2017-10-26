@@ -54,20 +54,22 @@ var fromRGB = function(input) {
 	document.querySelector('.models-input.i').value = r/3 + g/3 + b/3
 
 	var canv = document.querySelector(".canvas")
-	if (canv.classList.contains("hidden")) {
-		canv.classList.remove('hidden')
+	if (input == undefined) {
+		if (canv.classList.contains("hidden")) {
+			canv.classList.remove('hidden')
+		}
+		var ctx = canv.getContext("2d")
+		ctx.fillRect(20,20,400,400)
+	
+		ctx = ctx.getImageData(0, 0, canv.width, canv.height)
+	
+		for (var i = 0; i < ctx.data.length; i += 4) {
+			ctx.data[i] = r
+			ctx.data[i+1] = g
+			ctx.data[i+2] = b
+		}
+		document.querySelector(".canvas").getContext("2d").putImageData(ctx, 0, 0)
 	}
-	var ctx = canv.getContext("2d")
-	ctx.fillRect(20,20,400,400)
-
-	ctx = ctx.getImageData(0, 0, canv.width, canv.height)
-
-	for (var i = 0; i < ctx.data.length; i += 4) {
-		ctx.data[i] = r
-		ctx.data[i+1] = g
-		ctx.data[i+2] = b
-	}
-	document.querySelector(".canvas").getContext("2d").putImageData(ctx, 0, 0)
 
 	if (input != undefined) {
 		return {
@@ -137,29 +139,34 @@ var fromHSI = function(input) {
 
 	// console.log(r,g,b)
 
-	document.querySelector('.models-input.r').value = parseInt(r)
-	document.querySelector('.models-input.g').value = parseInt(g)
-	document.querySelector('.models-input.b').value = parseInt(b)
-
-	document.querySelector('.models-input.c').value = 255 - parseInt(r)
-	document.querySelector('.models-input.m').value = 255 - parseInt(g)
-	document.querySelector('.models-input.y').value = 255 - parseInt(b)
-
 	var canv = document.querySelector(".canvas")
-	if (canv.classList.contains("hidden")) {
-		canv.classList.remove('hidden')
-	}
-	var ctx = canv.getContext("2d")
-	ctx.fillRect(20,20,400,400)
 
-	ctx = ctx.getImageData(0, 0, canv.width, canv.height)
+	if (input == undefined) {
+		document.querySelector('.models-input.r').value = parseInt(r)
+		document.querySelector('.models-input.g').value = parseInt(g)
+		document.querySelector('.models-input.b').value = parseInt(b)
+	
+		document.querySelector('.models-input.c').value = 255 - parseInt(r)
+		document.querySelector('.models-input.m').value = 255 - parseInt(g)
+		document.querySelector('.models-input.y').value = 255 - parseInt(b)
 
-	for (var i = 0; i < ctx.data.length; i += 4) {
-		ctx.data[i] = r
-		ctx.data[i+1] = g
-		ctx.data[i+2] = b
+		if (canv.classList.contains("hidden")) {
+			canv.classList.remove('hidden')
+		}
+
+		var ctx = canv.getContext("2d")
+		ctx.fillRect(20,20,400,400)
+
+		ctx = ctx.getImageData(0, 0, canv.width, canv.height)
+
+		for (var i = 0; i < ctx.data.length; i += 4) {
+			ctx.data[i] = r
+			ctx.data[i+1] = g
+			ctx.data[i+2] = b
+		}
+		document.querySelector(".canvas").getContext("2d").putImageData(ctx, 0, 0)
+
 	}
-	document.querySelector(".canvas").getContext("2d").putImageData(ctx, 0, 0)
 
 	if (input != undefined) {
 		return {'rgb': [parseInt(r), parseInt(g), parseInt(b)],
