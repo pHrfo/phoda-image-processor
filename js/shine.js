@@ -12,6 +12,7 @@ var showShine = function(){
 	Object.assign(document.querySelector('.color-model-container').style,{display:"none"})
 	Object.assign(document.querySelector('.chroma-key-container').style,{display:"none"})
 	Object.assign(document.querySelector('.shine-container').style,{display:"block"})
+	Object.assign(document.querySelector('.haar-container').style,{display:"none"})
 
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')
@@ -45,14 +46,14 @@ var shineRGB = function() {
 var shineHSI = function() {
 	var img = genericFilter();
 	
-	var ki = parseInt(document.querySelector('.ki').value);
+	var ki = parseFloat(document.querySelector('.ki').value);
 
 	for (var i = 0; i < img.data.length; i += 4) {
 		var hsi = fromRGB([img.data[i],img.data[i+1],img.data[i+2]])['hsi']
 
 		var newi = ki*hsi[2]
 
-		console.log()
+		// console.log([hsi[0],hsi[1],newi])
 
 		var rgb = fromHSI([hsi[0], hsi[1], newi])['rgb']
 

@@ -13,6 +13,7 @@ var showConvolution = function(){
 	Object.assign(document.querySelector('.color-model-container').style,{display:"none"})
 	Object.assign(document.querySelector('.chroma-key-container').style,{display:"none"})
 	Object.assign(document.querySelector('.shine-container').style,{display:"none"})
+	Object.assign(document.querySelector('.haar-container').style,{display:"none"})
 
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')
@@ -43,6 +44,7 @@ var showResize = function(){
 	Object.assign(document.querySelector('.color-model-container').style,{display:"none"})
 	Object.assign(document.querySelector('.chroma-key-container').style,{display:"none"})
 	Object.assign(document.querySelector('.shine-container').style,{display:"none"})
+	Object.assign(document.querySelector('.haar-container').style,{display:"none"})
 
 
 
@@ -71,6 +73,7 @@ var showEnhancing = function () {
 	Object.assign(document.querySelector('.color-model-container').style,{display:"none"})
 	Object.assign(document.querySelector('.chroma-key-container').style,{display:"none"})
 	Object.assign(document.querySelector('.shine-container').style,{display:"none"})
+	Object.assign(document.querySelector('.haar-container').style,{display:"none"})
 
 
 	if (!imageContainer.classList.contains('hidden')){

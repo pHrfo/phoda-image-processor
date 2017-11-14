@@ -13,6 +13,7 @@
 		<script type="text/javascript" src="js/color_models.js"></script>
 		<script type="text/javascript" src="js/chroma_key.js"></script>
 		<script type="text/javascript" src="js/shine.js"></script>
+		<script type="text/javascript" src="js/wavelet.js"></script>
 	</head>
 	<body>
 		<header class="header-container">
@@ -29,6 +30,7 @@
 			<button class="header-button" onclick="showColorModels()">Color models</button>
 			<button class="header-button" onclick="showShine()">Shine</button>
 			<button class="header-button" onclick="showChromaKey()">Chroma Key</button>
+			<button class="header-button" onclick="showHaar()">Haar</button>
 			<button class="header-button" onclick="reset()">Reset</button>
 		</div>
 		<div class="input-container container" >
@@ -191,6 +193,9 @@
 				<button  class="pb_histogram" onclick="globalHistogramEq()">Global B&W histogram equalization</button>
 				<button  class="pb_histogram" onclick="globalHistogramEqRGB()">Global RGB histogram equalization</button>
 				<button  class="pb_histogram" onclick="localHistogramEq()">Local B&W histogram equalization</button>
+			</div>
+			<div class="haar-container hidden">
+				<button  class="pb_histogram" onclick="haar()">Haar Transform</button>
 			</div>
 			<div class="shine-container hidden">
 				<div class="filter-option gamma-filter-option">

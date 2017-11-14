@@ -17,6 +17,7 @@ var showColorModels = function() {
 	Object.assign(document.querySelector('.color-model-container').style,{display:"block"})
 	Object.assign(document.querySelector('.chroma-key-container').style,{display:"none"})
 	Object.assign(document.querySelector('.shine-container').style,{display:"none"})
+	Object.assign(document.querySelector('.haar-container').style,{display:"none"})
 
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')
@@ -53,7 +54,7 @@ var fromRGB = function(input) {
 	var denominator = Math.sqrt((Math.pow(r-g,2) + (r-b)*(g-b)))
 	var theta = toDegrees(Math.acos(numerator/denominator))
 
-	console.log(1 - 3*Math.min(r,g,b)/(r+g+b))
+	// console.log(1 - 3*Math.min(r,g,b)/(r+g+b))
 
 	document.querySelector('.models-input.h').value = (b <= g ? theta : 360 - theta)
 	document.querySelector('.models-input.s').value = 1 - 3*Math.min(r,g,b)/(r+g+b)
@@ -79,8 +80,8 @@ var fromRGB = function(input) {
 
 	if (input != undefined) {
 		return {
-			'cmy': [255-r, 255-g, 255-b],
-			'hsi': [(b <= g ? theta : 360 - theta), 1 - 3*Math.min(r,g,b)/(r+g+b), r/3 + g/3 + b/3]
+			'cmy': [255-r_, 255-g_, 255-b_],
+			'hsi': [(b <= g ? theta : 360 - theta), 1 - 3*Math.min(r,g,b)/(r+g+b), r_/3 + g_/3 + b_/3]
 		}
 	}
 }
@@ -127,7 +128,7 @@ var fromHSI = function(input) {
 	var r,g,b
 	if (h < 120) {
 		h = toRadians(h)
-		console.log(h,s,i)
+		// console.log(h,s,i)
 		r = i*(1 + (s*Math.cos(h))/(Math.cos(Math.PI/3-h)))
 		b = (1-s) < 0.001 ? 0 : i*(1-s)
 		g = 3*i - (r+b)
@@ -135,7 +136,7 @@ var fromHSI = function(input) {
 
 	else if (h < 240) {
 		h = toRadians(h - 120)
-		console.log(h,s,i)
+		// console.log(h,s,i)
 		r = (1-s) < 0.001 ? 0 : i*(1-s)
 		g = i*(1 + (s*Math.cos(h))/(Math.cos(Math.PI/3-h)))
 		b = 3*i - (r+g)
@@ -143,19 +144,19 @@ var fromHSI = function(input) {
 
 	else {
 		h = toRadians(h - 240)
-		console.log(h,s,i)
+		// console.log(h,s,i)
 		g = (1-s) < 0.001 ? 0 : i*(1 - s)
 		b = i*(1 + (s*Math.cos(h))/(Math.cos(Math.PI/3-h)))
 		r = 3*i - (g+b)
 	}
 
-	console.log(r,g,b)
+	// console.log(r,g,b)
 
 	r = r*255
 	g = g*255
 	b = b*255
 
-	console.log(r,g,b)
+	// console.log(r,g,b)
 
 	var canv = document.querySelector(".canvas")
 
