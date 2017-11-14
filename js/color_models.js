@@ -37,17 +37,23 @@ var showColorModels = function() {
 
 
 var fromRGB = function(input) {
-	var r = (input ? input[0] : document.querySelector('.models-input.r').value)
-	var g = (input ? input[1] : document.querySelector('.models-input.g').value)
-	var b = (input ? input[2] : document.querySelector('.models-input.b').value)
+	var r_ = (input ? input[0] : document.querySelector('.models-input.r').value)
+	var g_ = (input ? input[1] : document.querySelector('.models-input.g').value)
+	var b_ = (input ? input[2] : document.querySelector('.models-input.b').value)
 
-	document.querySelector('.models-input.c').value = 255 - r
-	document.querySelector('.models-input.m').value = 255 - g
-	document.querySelector('.models-input.y').value = 255 - b
+	document.querySelector('.models-input.c').value = 255 - r_
+	document.querySelector('.models-input.m').value = 255 - g_
+	document.querySelector('.models-input.y').value = 255 - b_
+
+	var r = r_/255
+	var g = g_/255
+	var b = b_/255
 
 	var numerator = ((r-g) + (r-b))/2
 	var denominator = Math.sqrt((Math.pow(r-g,2) + (r-b)*(g-b)))
-	var theta = Math.acos(numerator/denominator)
+	var theta = toDegrees(Math.acos(numerator/denominator))
+
+	console.log(1 - 3*Math.min(r,g,b)/(r+g+b))
 
 	document.querySelector('.models-input.h').value = (b <= g ? theta : 360 - theta)
 	document.querySelector('.models-input.s').value = 1 - 3*Math.min(r,g,b)/(r+g+b)
@@ -64,9 +70,9 @@ var fromRGB = function(input) {
 		ctx = ctx.getImageData(0, 0, canv.width, canv.height)
 	
 		for (var i = 0; i < ctx.data.length; i += 4) {
-			ctx.data[i] = r
-			ctx.data[i+1] = g
-			ctx.data[i+2] = b
+			ctx.data[i] = r_
+			ctx.data[i+1] = g_
+			ctx.data[i+2] = b_
 		}
 		document.querySelector(".canvas").getContext("2d").putImageData(ctx, 0, 0)
 	}
@@ -90,7 +96,7 @@ var fromCMY = function(input) {
 
 	var numerator = ((r-g) + (r-b))/2
 	var denominator = Math.sqrt((Math.pow(r-g,2) + (r-b)*(g-b)))
-	var theta = Math.acos(numerator/denominator)
+	var theta = toDegrees(Math.acos(numerator/denominator))
 
 	document.querySelector('.models-input.h').value = (b <= g ? theta : 360 - theta)
 	document.querySelector('.models-input.s').value = 1 - 3*Math.min(r,g,b)/(r+g+b)
@@ -114,30 +120,42 @@ var fromCMY = function(input) {
 }
 
 var fromHSI = function(input) {
-	var h = (input ? input[0] : document.querySelector('.models-input.h').value)
-	var s = (input ? input[1] : document.querySelector('.models-input.s').value)
-	var i = (input ? input[2] : document.querySelector('.models-input.i').value)
+	var h = parseFloat(input ? input[0] : document.querySelector('.models-input.h').value)
+	var s = parseFloat(input ? input[1] : document.querySelector('.models-input.s').value)
+	var i = parseFloat(input ? input[2] : document.querySelector('.models-input.i').value)/255
 
 	var r,g,b
 	if (h < 120) {
+		h = toRadians(h)
+		console.log(h,s,i)
 		r = i*(1 + (s*Math.cos(h))/(Math.cos(60-h)))
 		b = (1-s) < 0.001 ? 0 : i*(1-s)
 		g = 3*i - (r+b)
 	}
 
 	else if (h < 240) {
+		h = toRadians(h - 120)
+		console.log(h,s,i)
 		r = (1-s) < 0.001 ? 0 : i*(1-s)
 		g = i*(1 + (s*Math.cos(h))/(Math.cos(60-h)))
 		b = 3*i - (r+g)
 	}
 
 	else {
+		h = toRadians(h - 240)
+		console.log(h,s,i)
 		g = (1-s) < 0.001 ? 0 : i*(1 - s)
 		b = i*(1 + (s*Math.cos(h))/(Math.cos(60-h)))
 		r = 3*i - (g+b)
 	}
 
-	// console.log(r,g,b)
+	console.log(r,g,b)
+
+	r = r*255
+	g = g*255
+	b = b*255
+
+	console.log(r,g,b)
 
 	var canv = document.querySelector(".canvas")
 
@@ -172,6 +190,14 @@ var fromHSI = function(input) {
 		return {'rgb': [parseInt(r), parseInt(g), parseInt(b)],
 				'cmy': [255-parseInt(r), 255-parseInt(g), 255-parseInt(b)]}
 	}
+}
+
+var toRadians = function(degrees) {
+	return degrees*Math.PI/180
+}
+
+var toDegrees = function(radians) {
+	return radians*180/Math.PI
 }
 
 

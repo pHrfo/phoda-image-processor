@@ -94,6 +94,20 @@ var blackAndWhite = function() {
 	}
 };
 
+var sepia = function() {
+	var imgData = genericFilter()
+	if(imgData){
+
+		for (var i = 0; i < imgData.data.length; i += 4) {
+			var mean = (imgData.data[i] + imgData.data[i+1] + imgData.data[i+2])/3
+			imgData.data[i] = 1.4*mean
+			imgData.data[i+1] = 1.25*mean
+			imgData.data[i+2] = mean
+		}
+		document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
+	}
+};
+
 var negativeBW = function() {
 	var imgData = genericFilter()
 	if(imgData){
