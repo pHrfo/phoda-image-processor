@@ -57,7 +57,7 @@ var fromRGB = function(input) {
 
 	document.querySelector('.models-input.h').value = (b <= g ? theta : 360 - theta)
 	document.querySelector('.models-input.s').value = 1 - 3*Math.min(r,g,b)/(r+g+b)
-	document.querySelector('.models-input.i').value = r/3 + g/3 + b/3
+	document.querySelector('.models-input.i').value = (r/3 + g/3 + b/3)*255
 
 	var canv = document.querySelector(".canvas")
 	if (input == undefined) {
@@ -128,7 +128,7 @@ var fromHSI = function(input) {
 	if (h < 120) {
 		h = toRadians(h)
 		console.log(h,s,i)
-		r = i*(1 + (s*Math.cos(h))/(Math.cos(60-h)))
+		r = i*(1 + (s*Math.cos(h))/(Math.cos(Math.PI/3-h)))
 		b = (1-s) < 0.001 ? 0 : i*(1-s)
 		g = 3*i - (r+b)
 	}
@@ -137,7 +137,7 @@ var fromHSI = function(input) {
 		h = toRadians(h - 120)
 		console.log(h,s,i)
 		r = (1-s) < 0.001 ? 0 : i*(1-s)
-		g = i*(1 + (s*Math.cos(h))/(Math.cos(60-h)))
+		g = i*(1 + (s*Math.cos(h))/(Math.cos(Math.PI/3-h)))
 		b = 3*i - (r+g)
 	}
 
@@ -145,7 +145,7 @@ var fromHSI = function(input) {
 		h = toRadians(h - 240)
 		console.log(h,s,i)
 		g = (1-s) < 0.001 ? 0 : i*(1 - s)
-		b = i*(1 + (s*Math.cos(h))/(Math.cos(60-h)))
+		b = i*(1 + (s*Math.cos(h))/(Math.cos(Math.PI/3-h)))
 		r = 3*i - (g+b)
 	}
 
