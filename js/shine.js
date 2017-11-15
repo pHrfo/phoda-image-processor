@@ -31,9 +31,9 @@ var showShine = function(){
 var shineRGB = function() {
 	var img = genericFilter();
 	
-	var kr = parseInt(document.querySelector('.kr').value);
-	var kg = parseInt(document.querySelector('.kg').value);
-	var kb = parseInt(document.querySelector('.kb').value);
+	var kr = parseFloat(document.querySelector('.kr').value);
+	var kg = parseFloat(document.querySelector('.kg').value);
+	var kb = parseFloat(document.querySelector('.kb').value);
 
 	for (var i = 0; i < img.data.length; i += 4) {
 		img.data[i] = kr*img.data[i];

@@ -196,6 +196,7 @@
 			</div>
 			<div class="haar-container hidden">
 				<button  class="pb_histogram" onclick="haar()">Haar Transform</button>
+				<button  class="pb_histogram" onclick="inverseHaar()">Inverse Haar Transform</button>
 			</div>
 			<div class="shine-container hidden">
 				<div class="filter-option gamma-filter-option">
@@ -203,16 +204,16 @@
 						<div class="models-input-container">
 							<div class="models-container">
 								<h4 class="models-input-header">RGB</h4>
-								<input class = "models-input kr" type="number" oninput="" value="0" min="0" max="255" />
-								<input class = "models-input kg" type="number" oninput="" value="0" min="0" max="255" />
-								<input class = "models-input kb" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input kr" type="number" oninput="" value="1" min="0" max="255" />
+								<input class = "models-input kg" type="number" oninput="" value="1" min="0" max="255" />
+								<input class = "models-input kb" type="number" oninput="" value="1" min="0" max="255" />
 								<div class="button-models">
 									<button class= "models-ok krgb" onclick="shineRGB()">ok</button>
 								</div>
 							</div>
 							<div class="models-container">
 								<h4 class="models-input-header">HSI</h4>
-								<input class = "models-input ki" type="number" oninput="" value="0" min="0" max="255" />
+								<input class = "models-input ki" type="number" oninput="" value="1" min="0" max="255" />
 								<div class="button-models">
 									<button class= "models-ok khsi" onclick="shineHSI()">ok</button>
 								</div>
