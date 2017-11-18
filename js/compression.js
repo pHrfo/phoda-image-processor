@@ -85,15 +85,15 @@ var buildHuffmanTree = function(tuples){
     return tuples[0][1];
 }
 
-var assignHuffmanCodes = function(codes, node,pat){
+var assignHuffmanCodes = function(codes, node, pat){
     pat = pat || "";
 
     if (typeof node == typeof ""){
         codes[node] = pat;
     }
     else{
-        assignHuffmanCodes(node[0],pat+"0");
-        assignHuffmanCodes(node[1],pat+"1");
+        assignHuffmanCodes(codes,node[0],pat+"0");
+        assignHuffmanCodes(codes,node[1],pat+"1");
     }
     
 }
@@ -156,7 +156,7 @@ var readBinary = function(file){
 
 }
 
-var runlength = function(array){
+var encodeRunlength = function(array){
     let result = '',
         zeros = 0,
         zerosTemp = '',
@@ -186,16 +186,87 @@ var decodeRunLength = function(array){
 
 }
 
+var encodeLZW = function(array, dict){
+	    let data = array.split(""),
+	    out = [],
+	    currChar,
+	    phrase = data[0],
+	    code = 256,
+	    i;
+
+    for (i = 1; i < data.length; i++) {
+        currChar = data[i];
+        if (dict[phrase + currChar] != null) {
+            phrase += currChar;
+        }
+        else {
+            out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+            dict[phrase + currChar] = code;
+            code++;
+            phrase = currChar;
+        }
+    }
+    out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+    for (i = 0; i < out.length; i++) {
+        out[i] = String.fromCharCode(out[i]);
+    }
+    return out.join("");
+}
+
+var decodeLZW = function(array, dict){
+	let data = array.split(""),
+        currChar = data[0],
+        oldPhrase = currChar,
+        out = [currChar],
+        code = 256,
+        phrase;
+	    
+
+    for (let i = 1; i < data.length; i++) {
+        let currCode = data[i].charCodeAt(0);
+        
+        if (currCode < 256) {
+            phrase = data[i];
+        }
+        
+        else{
+            phrase = dict[currCode] ? dict[currCode] : (oldPhrase + currChar);
+        }
+
+        out.push(phrase);
+        currChar = phrase.charAt(0);
+        dict[code] = oldPhrase + currChar;
+        code++;
+        oldPhrase = phrase;
+    }
+    return out.join("");
+}
+
 var compress = function(){
 	let img = genericFilter(),
+		dict = {},
 		encoded = Huffman(img);
+	
+	let huffman_length = encoded[0][0].length + encoded[1][0].length + encoded[2][0].length;
+	
+	console.log("Total Huffman length:",huffman_length);
+	let oR = encodeLZW(encoded[0][0],dict);
+	let oG = encodeLZW(encoded[1][0],dict);
+	let oB = encodeLZW(encoded[2][0],dict);
+	console.log("Total LZW length:", oR.length + oG.length + oB.length);
+	// let rlR = encodeRunlength(encoded[0][0]);
+	// console.log(rlR.length)
 
-	let rlR = runlength(encoded[0][0]);
-	var blob = new Blob([rlR], {type: "application/octet-stream"});
+	var blob = new Blob([oR,
+						oG,
+						oB,
+						encoded[0][1],
+						encoded[1][1],
+						encoded[2][1]], {type: "application/octet-stream"});
 	var fileName = "encoded.phoda";
 	saveAs(blob, fileName);
-	// let rlG = runlength(encoded[1][0]);
-	// let rlB = runlength(encoded[2][0]);
+	// let rlG = encodeRunlength(encoded[1][0]);
+	// let rlB = encodeRunlength(encoded[2][0]);
 	// saveBinary({R:[rlR,encoded[0][1]], G: [rlG,encoded[1][1]], B: [rlB,encoded[2][1]]})
 }
 
