@@ -31,10 +31,6 @@ var showCompression = function () {
 
 }
 
-var runlength = function(){
-
-}
-
 var sortHuffmanFrequencies = function(channelsFrequencies){
 	let sortedChannel = [];
 	for(let i in channelsFrequencies)
@@ -55,16 +51,16 @@ var computeHuffmanFrequencies = function(array){
 		}
 
 		if(!(array[i+1] in channelsFrequencies.R)){
-			channelsFrequencies.R[array[i+1]] = 1;
+			channelsFrequencies.G[array[i+1]] = 1;
 		}
 
 		if(!(array[i+2] in channelsFrequencies.R)){
-			channelsFrequencies.R[array[i+2]] = 1;
+			channelsFrequencies.B[array[i+2]] = 1;
 		}
 
 		channelsFrequencies.R[array[i]]++;
-		channelsFrequencies.R[array[i+1]]++;
-		channelsFrequencies.R[array[i+2]]++;
+		channelsFrequencies.G[array[i+1]]++;
+		channelsFrequencies.B[array[i+2]]++;
 	}
 
 	sortedR = sortHuffmanFrequencies(channelsFrequencies.R);
@@ -75,7 +71,7 @@ var computeHuffmanFrequencies = function(array){
 }
 
 var buildHuffmanTree = function(tuples){
-    while(tuples.length>1){
+    while(tuples.length > 1){
         let parent = [tuples[0][1],tuples[1][1]];
         let parentFreq = tuples[0][0] + tuples[1][0];
 
@@ -103,9 +99,9 @@ var assignHuffmanCodes = function(codes, node,pat){
 }
 
 var encodeHuffman = function(codes, array, tree){
-	var output="";
+	let output="";
 
-    for(var i in array)
+    for(let i in array)
         output = output + codes[array[i]];
 
 	return [output, tree];
@@ -115,8 +111,8 @@ var Huffman = function (img){
 	let freqs = computeHuffmanFrequencies(img.data),
 		treeR = buildHuffmanTree(freqs[0]),
 		treeG = buildHuffmanTree(freqs[1]),
-		treeB = buildHuffmanTree(freqs[2]),
-		codes = {R:{},G:{},B:{}}
+		treeB = buildHuffmanTree(freqs[2]),	
+		codes = {R:{},G:{},B:{}},
 		encodedR, encodedG, encodedB;
 
 	assignHuffmanCodes(codes.R,treeR);
@@ -132,9 +128,10 @@ var Huffman = function (img){
 
 var decodeHuffman = function(tree,array){
 	let output="",
-		p = tree;
+		p = tree,
+		bit;
 
-    for (let bit in array){
+    for (bit in array){
                 
         if (array[bit] == 0){
             p = p[0];
@@ -150,10 +147,53 @@ var decodeHuffman = function(tree,array){
     return output
 }
 
+
+var saveBinary = function(rgb){
+
+}
+
+var readBinary = function(file){
+
+}
+
+var runlength = function(array){
+    let result = '',
+        zeros = 0,
+        zerosTemp = '',
+        wordLength = 0;
+
+    for (i = 0; i < array.length; i ++) {
+        if (array[i] === '0') 
+            zeros += 1;
+        
+        else{
+            zerosTemp = zeros.toString(2);
+            wordLength = zerosTemp.length - 1;
+
+            while (wordLength) {
+                result = result + '1';
+                wordLength -= 1;
+            }
+            
+            result += '0' + zerosTemp;
+            zeros = 0;
+        }
+    }
+    return result;
+}
+
+var decodeRunLength = function(array){
+
+}
+
 var compress = function(){
-	let img = genericFilter();
-	// let encoded = huffman(img);
-	// let rlR = runlength(encoded[0][0]);
+	let img = genericFilter(),
+		encoded = Huffman(img);
+
+	let rlR = runlength(encoded[0][0]);
+	var blob = new Blob([rlR], {type: "application/octet-stream"});
+	var fileName = "encoded.phoda";
+	saveAs(blob, fileName);
 	// let rlG = runlength(encoded[1][0]);
 	// let rlB = runlength(encoded[2][0]);
 	// saveBinary({R:[rlR,encoded[0][1]], G: [rlG,encoded[1][1]], B: [rlB,encoded[2][1]]})
