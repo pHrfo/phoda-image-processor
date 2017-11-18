@@ -15,7 +15,7 @@ var showChromaKey = function(){
 	Object.assign(document.querySelector('.chroma-key-container').style,{display:"block"})
 	Object.assign(document.querySelector('.shine-container').style,{display:"none"})
 	Object.assign(document.querySelector('.haar-container').style,{display:"none"})
-
+	Object.assign(document.querySelector('.compression-container').style,{display:"none"})
 
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')

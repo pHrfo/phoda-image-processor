@@ -14,6 +14,7 @@
 		<script type="text/javascript" src="js/chroma_key.js"></script>
 		<script type="text/javascript" src="js/shine.js"></script>
 		<script type="text/javascript" src="js/wavelet.js"></script>
+		<script type="text/javascript" src="js/compression.js"></script>
 	</head>
 	<body>
 		<header class="header-container">
@@ -31,6 +32,7 @@
 			<button class="header-button" onclick="showShine()">Shine</button>
 			<button class="header-button" onclick="showChromaKey()">Chroma Key</button>
 			<button class="header-button" onclick="showHaar()">Haar</button>
+			<button class="header-button" onclick="showCompression()">Compression</button>
 			<button class="header-button" onclick="reset()">Reset</button>
 		</div>
 		<div class="input-container container" >
@@ -230,6 +232,13 @@
 				<button  class="pb_histogram" onclick="laplacian()">Laplacian</button>
 				<button  class="pb_histogram" onclick="highboost()">Highboost</button>
 				<button  class="pb_histogram" onclick="sobel()">Sobel</button>
+			</div>
+			<div class="compression-container hidden">
+				<button  onclick="compress()">Compress Image</button>
+				<div class="compressed">
+						<input type="file" id="compressedImage">
+				</div>
+				<button  onclick="decompress()">Decompress Image</button>
 			</div>
 			<div class="filter-container hidden">
 				<div class="filter-buttons">	
