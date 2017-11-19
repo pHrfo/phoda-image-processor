@@ -213,13 +213,14 @@ var encodeLZW = function(array, dict){
     return out.join("");
 }
 
-var decodeLZW = function(array, dict){
+var decodeLZW = function(array){
 	let data = array.split(""),
         currChar = data[0],
         oldPhrase = currChar,
         out = [currChar],
         code = 256,
-        phrase;
+        phrase
+        dict = {};
 	    
 
     for (let i = 1; i < data.length; i++) {
@@ -239,6 +240,7 @@ var decodeLZW = function(array, dict){
         code++;
         oldPhrase = phrase;
     }
+
     return out.join("");
 }
 
@@ -251,23 +253,21 @@ var compress = function(){
 	
 	console.log("Total Huffman length:",huffman_length);
 	let oR = encodeLZW(encoded[0][0],dict);
-	let oG = encodeLZW(encoded[1][0],dict);
-	let oB = encodeLZW(encoded[2][0],dict);
-	console.log("Total LZW length:", oR.length + oG.length + oB.length);
-	// let rlR = encodeRunlength(encoded[0][0]);
-	// console.log(rlR.length)
+	// let oG = encodeLZW(encoded[1][0],dict);
+	// let oB = encodeLZW(encoded[2][0],dict);
+	// console.log("Total LZW length:", oR.length + oG.length + oB.length);
 
-	var blob = new Blob([oR,
-						oG,
-						oB,
-						encoded[0][1],
-						encoded[1][1],
-						encoded[2][1]], {type: "application/octet-stream"});
-	var fileName = "encoded.phoda";
-	saveAs(blob, fileName);
-	// let rlG = encodeRunlength(encoded[1][0]);
-	// let rlB = encodeRunlength(encoded[2][0]);
-	// saveBinary({R:[rlR,encoded[0][1]], G: [rlG,encoded[1][1]], B: [rlB,encoded[2][1]]})
+	let dR = decodeLZW(oR);
+	decoded = decodeHuffman(encoded[0][1], dR);
+	console.log(decoded.length,encoded[0][0].length);
+	// var blob = new Blob([oR,
+	// 					oG,
+	// 					oB,
+	// 					encoded[0][1],
+	// 					encoded[1][1],
+	// 					encoded[2][1]],{type: "application/octet-stream"});
+	// var fileName = "encoded.phoda";
+	// saveAs(blob, fileName);
 }
 
 var decompress = function(){
