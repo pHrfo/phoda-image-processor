@@ -127,45 +127,6 @@ var decodeHuffman = function(tree,array){
     return output
 }
 
-
-var saveBinary = function(rgb){
-
-}
-
-var readBinary = function(file){
-
-}
-
-var encodeRunlength = function(array){
-    let result = '',
-        zeros = 0,
-        zerosTemp = '',
-        wordLength = 0;
-
-    for (i = 0; i < array.length; i ++) {
-        if (array[i] === '0') 
-            zeros += 1;
-        
-        else{
-            zerosTemp = zeros.toString(2);
-            wordLength = zerosTemp.length - 1;
-
-            while (wordLength) {
-                result = result + '1';
-                wordLength -= 1;
-            }
-            
-            result += '0' + zerosTemp;
-            zeros = 0;
-        }
-    }
-    return result;
-}
-
-var decodeRunLength = function(array){
-
-}
-
 var encodeLZW = function(data){
     let out = [],
     currChar,
@@ -225,9 +186,6 @@ var decodeLZW = function(data){
         code++;
         last = currChar;
     }
-
-    // console.log(out)
-
     return out;
 }
 
@@ -237,41 +195,38 @@ var firstChar = function(str) {
 
 var compress = function(){
 	let imgData = genericFilter(),
-		encoded = encodeLZW(imgData.data)
-	
-    var decoded = decodeLZW(encoded)
+		encoded = encodeLZW(imgData.data);
+            
+    // console.log(Huffman(encoded)[0].length)
+    encoded.push(imgData.width);
+    encoded.push(imgData.height);
 
-    console.log(imgData.data.length)
-	console.log(encoded.length)
-    console.log(decoded.length)
-
-    for (var i = 0; i < imgData.data.length; i++) {
-        // console.log(imgData.data[i] == decoded[i], imgData.data[i], decoded[i])
-        imgData.data[i] = decoded[i]
-    }
-
-    document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
-	// encoded = Huffman(encoded);
-	// console.log(encoded[0].length)
-	// let huffman_length = encoded[0][0].length + encoded[1][0].length + encoded[2][0].length;
-	
-	// console.log("Total Huffman length:",huffman_length);
-	// let oR = encodeLZW(encoded[0][0],dict);
-	// let oG = encodeLZW(encoded[1][0],dict);
-	// let oB = encodeLZW(encoded[2][0],dict);
-	// console.log("Total LZW length:", oR.length + oG.length + oB.length);
-
-	// let dR = decodeLZW(oR);
-	// decoded = decodeHuffman(encoded[0][1], dR);
-	// console.log(decoded.length,encoded[0][0].length);
-	var blob = new Blob([encoded],{type: "application/octet-stream"});
+    var blob = new Blob([encoded],{type: "application/octet-stream"});
 	var fileName = "encoded.phoda";
 	saveAs(blob, fileName);
 }
 
 var decompress = function(){
 	let files = document.getElementById("compressedImage").files;
-	// tree,array = readBinary(file);
-	// array = decodeRunLength(array);
-	// let dataR = decodeHuffman(tree,array);
+    
+    var reader = new FileReader();
+    
+    reader.onloadend = function(e){
+        var data = e.target.result.split(",").map(Number);
+        var width = data.pop();
+        var height = data.pop();
+    
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        
+        var imageData = canvas.getContext('2d').createImageData(width, height);
+
+        var decoded = decodeLZW(data);
+        imageData.data.set(decoded);
+
+        document.querySelector(".canvas").getContext("2d").putImageData(imageData, 0, 0);
+
+    };
+    reader.readAsText(files[0]);
 }
