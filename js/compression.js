@@ -213,8 +213,8 @@ var decompress = function(){
     
     reader.onloadend = function(e){
         var data = e.target.result.split(",").map(Number);
-        var width = data.pop();
         var height = data.pop();
+        var width = data.pop();
     
         var canvas = document.createElement('canvas');
         canvas.width = width;
