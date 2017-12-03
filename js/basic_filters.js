@@ -16,6 +16,8 @@ var readImage = function(event, element) {
 	Object.assign(document.querySelector('.shine-container').style,{display:"none"})
 	Object.assign(document.querySelector('.haar-container').style,{display:"none"})
 	Object.assign(document.querySelector('.compression-container').style,{display:"none"})
+	Object.assign(document.querySelector('.morphological-container').style,{display:"none"})
+	
 	var file = event.target.files[0]
 	var reader = new FileReader()
 

@@ -34,6 +34,7 @@
 			<button class="header-button" onclick="showChromaKey()">Chroma Key</button>
 			<button class="header-button" onclick="showHaar()">Haar</button>
 			<button class="header-button" onclick="showCompression()">Compression</button>
+			<button class="header-button" onclick="showMorphological()">Morphological</button>
 			<button class="header-button" onclick="reset()">Reset</button>
 		</div>
 		<div class="input-container container" >
@@ -234,13 +235,6 @@
 				<button  class="pb_histogram" onclick="highboost()">Highboost</button>
 				<button  class="pb_histogram" onclick="sobel()">Sobel</button>
 			</div>
-			<div class="compression-container hidden">
-				<button  onclick="compress()">Compress Image</button>
-				<div class="compressed">
-						<input type="file" id="compressedImage">
-				</div>
-				<button  onclick="decompress()">Decompress Image</button>
-			</div>
 			<div class="filter-container hidden">
 				<div class="filter-buttons">	
 					<input type="checkbox" id="original_cb">Use original image<br>
@@ -297,6 +291,19 @@
 					<p id="originalh"></p>
 				</div>
 			</div>
+			<div class="compression-container hidden">
+				<button  onclick="compress()">Compress Image</button>
+				<div class="compressed">
+						<input type="file" id="compressedImage">
+				</div>
+				<button  onclick="decompress()">Decompress Image</button>
+			</div>
+			<div class="morphological-container hidden">
+				<button  onclick="erosion()">Erosion</button>
+				<button  onclick="dilation()">Dilation</button>
+				<button  onclick="edge()">Edge detection</button>
+			</div>
+
 			<div class="panel">
 				<div class="image-canvas-container container">
 					<div class="image-container hidden">

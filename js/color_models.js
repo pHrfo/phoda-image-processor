@@ -19,6 +19,8 @@ var showColorModels = function() {
 	Object.assign(document.querySelector('.shine-container').style,{display:"none"})
 	Object.assign(document.querySelector('.haar-container').style,{display:"none"})
 	Object.assign(document.querySelector('.compression-container').style,{display:"none"})
+	Object.assign(document.querySelector('.morphological-container').style,{display:"none"})
+
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')
 		document.querySelector('.chart-div').classList.add('hidden')

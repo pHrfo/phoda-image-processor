@@ -14,7 +14,8 @@ var showCompression = function () {
 	Object.assign(document.querySelector('.shine-container').style,{display:"none"})
 	Object.assign(document.querySelector('.haar-container').style,{display:"none"})
 	Object.assign(document.querySelector('.compression-container').style,{display:"block"})
-
+	Object.assign(document.querySelector('.morphological-container').style,{display:"none"})
+	
 	if (!histogramContainer.classList.contains('hidden')){
 		histogramContainer.classList.add('hidden')
 		document.querySelector('.chart-div').classList.add('hidden')
@@ -41,33 +42,20 @@ var sortHuffmanFrequencies = function(channelsFrequencies){
 }
 
 var computeHuffmanFrequencies = function(array){
-	let channelsFrequencies = {R:{},G:{},B:{}};
-	let sortedR, sortedG, sortedB;
-
+	let channelsFrequencies = {};
+	let sorted;
 	for(let i = 0; i < array.length; i += 4){
 
-		if(!(array[i] in channelsFrequencies.R)){
-			channelsFrequencies.R[array[i]] = 1;
+		if(!(array[i] in channelsFrequencies)){
+			channelsFrequencies[array[i]] = 1;
 		}
 
-		if(!(array[i+1] in channelsFrequencies.R)){
-			channelsFrequencies.G[array[i+1]] = 1;
-		}
-
-		if(!(array[i+2] in channelsFrequencies.R)){
-			channelsFrequencies.B[array[i+2]] = 1;
-		}
-
-		channelsFrequencies.R[array[i]]++;
-		channelsFrequencies.G[array[i+1]]++;
-		channelsFrequencies.B[array[i+2]]++;
+		channelsFrequencies[array[i]]++;
 	}
 
-	sortedR = sortHuffmanFrequencies(channelsFrequencies.R);
-	sortedG = sortHuffmanFrequencies(channelsFrequencies.G);
-	sortedB = sortHuffmanFrequencies(channelsFrequencies.B);
+	sorted = sortHuffmanFrequencies(channelsFrequencies);
 
-	return [sortedR, sortedG, sortedB];
+	return sorted;
 }
 
 var buildHuffmanTree = function(tuples){
@@ -107,23 +95,15 @@ var encodeHuffman = function(codes, array, tree){
 	return [output, tree];
 }
 
-var Huffman = function (img){
-	let freqs = computeHuffmanFrequencies(img.data),
-		treeR = buildHuffmanTree(freqs[0]),
-		treeG = buildHuffmanTree(freqs[1]),
-		treeB = buildHuffmanTree(freqs[2]),	
-		codes = {R:{},G:{},B:{}},
-		encodedR, encodedG, encodedB;
+var Huffman = function (data){
+	let freqs = computeHuffmanFrequencies(data),
+		tree = buildHuffmanTree(freqs)	
+		codes = {};
 
-	assignHuffmanCodes(codes.R,treeR);
-	assignHuffmanCodes(codes.G,treeG);
-	assignHuffmanCodes(codes.B,treeB);
+	assignHuffmanCodes(codes,tree);
+	encoded = encodeHuffman(codes,data,tree);
 
-	encodedR = encodeHuffman(codes.R,img.data,treeR);
-	encodedG = encodeHuffman(codes.G,img.data,treeG);
-	encodedB = encodeHuffman(codes.B,img.data,treeB);
-
-	return [encodedR,encodedG,encodedB];
+	return encoded;
 }
 
 var decodeHuffman = function(tree,array){
@@ -186,16 +166,16 @@ var decodeRunLength = function(array){
 
 }
 
-var encodeLZW = function(array, dict){
-	    let data = array.split(""),
-	    out = [],
-	    currChar,
-	    phrase = data[0],
-	    code = 256,
-	    i;
+var encodeLZW = function(data){
+    let out = [],
+    currChar,
+    phrase = String.fromCharCode(data[0]),
+    code = 256,
+    i,
+    dict = {};
 
     for (i = 1; i < data.length; i++) {
-        currChar = data[i];
+        currChar = String.fromCharCode(data[i]);
         if (dict[phrase + currChar] != null) {
             phrase += currChar;
         }
@@ -208,14 +188,13 @@ var encodeLZW = function(array, dict){
     }
     out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
     for (i = 0; i < out.length; i++) {
-        out[i] = String.fromCharCode(out[i]);
+        out[i] =out[i];
     }
     return out.join("");
 }
 
-var decodeLZW = function(array){
-	let data = array.split(""),
-        currChar = data[0],
+var decodeLZW = function(data){
+	let currChar = data[0],
         oldPhrase = currChar,
         out = [currChar],
         code = 256,
@@ -246,20 +225,22 @@ var decodeLZW = function(array){
 
 var compress = function(){
 	let img = genericFilter(),
-		dict = {},
-		encoded = Huffman(img);
+		encoded = encodeLZW(img.data)
+	console.log(img.data.length)
+	console.log(encoded.length)
+	// encoded = Huffman(encoded);
+	// console.log(encoded[0].length)
+	// let huffman_length = encoded[0][0].length + encoded[1][0].length + encoded[2][0].length;
 	
-	let huffman_length = encoded[0][0].length + encoded[1][0].length + encoded[2][0].length;
-	
-	console.log("Total Huffman length:",huffman_length);
-	let oR = encodeLZW(encoded[0][0],dict);
+	// console.log("Total Huffman length:",huffman_length);
+	// let oR = encodeLZW(encoded[0][0],dict);
 	// let oG = encodeLZW(encoded[1][0],dict);
 	// let oB = encodeLZW(encoded[2][0],dict);
 	// console.log("Total LZW length:", oR.length + oG.length + oB.length);
 
-	let dR = decodeLZW(oR);
-	decoded = decodeHuffman(encoded[0][1], dR);
-	console.log(decoded.length,encoded[0][0].length);
+	// let dR = decodeLZW(oR);
+	// decoded = decodeHuffman(encoded[0][1], dR);
+	// console.log(decoded.length,encoded[0][0].length);
 	// var blob = new Blob([oR,
 	// 					oG,
 	// 					oB,

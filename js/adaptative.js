@@ -13,6 +13,8 @@ var showAdaptative = function() {
 	Object.assign(document.querySelector('.shine-container').style,{display:"none"})
 	Object.assign(document.querySelector('.haar-container').style,{display:"none"})
 	Object.assign(document.querySelector('.compression-container').style,{display:"none"})
+	Object.assign(document.querySelector('.morphological-container').style,{display:"none"})
+
 	if (!imageContainer.classList.contains('hidden')){
 		imageContainer.classList.add('hidden')
 	} 
