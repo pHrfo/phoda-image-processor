@@ -169,65 +169,88 @@ var decodeRunLength = function(array){
 var encodeLZW = function(data){
     let out = [],
     currChar,
-    phrase = String.fromCharCode(data[0]),
+    phrase = data[0].toString(),
     code = 256,
     i,
     dict = {};
+    var j= 0;
 
     for (i = 1; i < data.length; i++) {
-        currChar = String.fromCharCode(data[i]);
-        if (dict[phrase + currChar] != null) {
-            phrase += currChar;
+        currChar = data[i].toString();
+        if (dict[phrase + "_" + currChar] != null) {
+            phrase += "_" + currChar;            
         }
         else {
-            out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
-            dict[phrase + currChar] = code;
+            out.push(phrase.split("_").length > 1 ? dict[phrase] : phrase);
+            dict[phrase + "_" + currChar] = code;
             code++;
             phrase = currChar;
         }
     }
-    out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
-    for (i = 0; i < out.length; i++) {
-        out[i] =out[i];
-    }
-    return out.join("");
+    out.push(phrase.split("_").length > 1 ? dict[phrase] : phrase);
+    // console.log(out)
+    return out;
 }
 
 var decodeLZW = function(data){
-	let currChar = data[0],
-        oldPhrase = currChar,
-        out = [currChar],
+	var currChar = data[0].toString(),
         code = 256,
-        phrase
-        dict = {};
-	    
+        code_dict = {};
+        last = currChar;
+        out = [currChar]
 
-    for (let i = 1; i < data.length; i++) {
-        let currCode = data[i].charCodeAt(0);
-        
-        if (currCode < 256) {
-            phrase = data[i];
-        }
-        
-        else{
-            phrase = dict[currCode] ? dict[currCode] : (oldPhrase + currChar);
-        }
-
-        out.push(phrase);
-        currChar = phrase.charAt(0);
-        dict[code] = oldPhrase + currChar;
-        code++;
-        oldPhrase = phrase;
+    for (let i=0; i<=255; i++) {
+        code_dict[i.toString()] = i.toString()
     }
 
-    return out.join("");
+    for (let i = 1; i < data.length; i++) {
+        let currChar = data[i].toString();
+
+        var word = ''
+        
+        if (code_dict[currChar] != undefined) {
+            for (var j=0; j<code_dict[currChar].split("_").length; j++)
+                out.push(code_dict[currChar].split("_")[j]);
+            word = code_dict[last] + "_" + firstChar(code_dict[currChar])
+        }
+
+        else {
+            word = code_dict[last] + "_" + firstChar(code_dict[last]);
+            for (var j=0; j<word.split("_").length; j++)
+                out.push(word.split("_")[j]);
+            
+        }
+
+        code_dict[code] = word;
+        code++;
+        last = currChar;
+    }
+
+    // console.log(out)
+
+    return out;
+}
+
+var firstChar = function(str) {
+    return str.split("_")[0]
 }
 
 var compress = function(){
-	let img = genericFilter(),
-		encoded = encodeLZW(img.data)
-	console.log(img.data.length)
+	let imgData = genericFilter(),
+		encoded = encodeLZW(imgData.data)
+	
+    var decoded = decodeLZW(encoded)
+
+    console.log(imgData.data.length)
 	console.log(encoded.length)
+    console.log(decoded.length)
+
+    for (var i = 0; i < imgData.data.length; i++) {
+        // console.log(imgData.data[i] == decoded[i], imgData.data[i], decoded[i])
+        imgData.data[i] = decoded[i]
+    }
+
+    document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0)
 	// encoded = Huffman(encoded);
 	// console.log(encoded[0].length)
 	// let huffman_length = encoded[0][0].length + encoded[1][0].length + encoded[2][0].length;
@@ -241,14 +264,9 @@ var compress = function(){
 	// let dR = decodeLZW(oR);
 	// decoded = decodeHuffman(encoded[0][1], dR);
 	// console.log(decoded.length,encoded[0][0].length);
-	// var blob = new Blob([oR,
-	// 					oG,
-	// 					oB,
-	// 					encoded[0][1],
-	// 					encoded[1][1],
-	// 					encoded[2][1]],{type: "application/octet-stream"});
-	// var fileName = "encoded.phoda";
-	// saveAs(blob, fileName);
+	var blob = new Blob([encoded],{type: "application/octet-stream"});
+	var fileName = "encoded.phoda";
+	saveAs(blob, fileName);
 }
 
 var decompress = function(){
