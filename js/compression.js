@@ -59,17 +59,23 @@ var computeHuffmanFrequencies = function(array){
 }
 
 var buildHuffmanTree = function(tuples){
+    var ct = 0;
+    console.log(tuples.length)
     while(tuples.length > 1){
-        let parent = [tuples[0][1],tuples[1][1]];
+        let parent = tuples[0][1] + "_" + tuples[1][1];
         let parentFreq = tuples[0][0] + tuples[1][0];
 
-        let rest = tuples.slice(2,tuples.length);
+        tuples = tuples.slice(2,tuples.length);
+        ct++;
 
-        tuples = rest;
         end = [parentFreq,parent];
         tuples.push(end);
         tuples.sort();
+        if (ct % 100 == 0) {
+            console.log(tuples.length)
+        }
     }
+    console.log("Cabou")
     return tuples[0][1];
 }
 
@@ -193,17 +199,66 @@ var firstChar = function(str) {
     return str.split("_")[0]
 }
 
-var compress = function(){
+var encodeRunLength = function(list_of_chars) {
+    var lastChar = list_of_chars[0];
+    var counter = 0;
+    var encoded = [];
+    var currChar;
+
+    for (let el in list_of_chars) {
+        currChar = list_of_chars[el];
+        
+        if (currChar != lastChar) {
+            encoded.push([lastChar, counter]);
+            counter = 1;
+            lastChar = currChar;
+        }
+
+        else
+            counter++;
+    }
+
+    return encoded
+}
+
+var decodeRunLength = function(list_of_chars) {
+    var decoded = []
+
+    for (let el in list_of_chars){
+        var reps = list_of_chars[el][1]
+        var ch = list_of_chars[el][0]
+
+        for (var i=0; i<parseInt(reps); i++)
+            decoded.push(ch)
+        // console.log(decoded)
+    }
+
+    return decoded
+
+}
+
+var compress = function() {
 	let imgData = genericFilter(),
 		encoded = encodeLZW(imgData.data);
-            
-    // console.log(Huffman(encoded)[0].length)
-    encoded.push(imgData.width);
-    encoded.push(imgData.height);
+
+    console.log(imgData.data.length)
+    console.log(encoded.length)   
+    // encoded = encodeRunLength(encoded)
+    
 
     var blob = new Blob([encoded],{type: "application/octet-stream"});
 	var fileName = "encoded.phoda";
 	saveAs(blob, fileName);
+
+    console.log("To aqui")
+    // var decoded = decodeRunLength(encoded)
+    var decoded = decodeLZW(encoded)
+    console.log(decoded.length)
+
+    for (var i=0; i<imgData.data.length; i++)
+        imgData.data[i] = decoded[i]
+
+    document.querySelector(".canvas").getContext("2d").putImageData(imgData, 0, 0);
 }
 
 var decompress = function(){
